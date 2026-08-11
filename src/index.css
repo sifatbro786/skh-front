@@ -1,0 +1,100 @@
+/* --- Google Fonts Import --- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
+
+@import "tailwindcss";
+
+/* --- Tailwind CSS v4 Custom Theme Setup --- */
+@theme {
+    --font-sans: "Inter", sans-serif;
+    --font-heading: "Plus Jakarta Sans", sans-serif;
+
+    /* Brand Colors Derived from SKH Sourcing Logo & Identity */
+    --color-brand-dark: #0f172a; /* Deep Slate Navy Header/Hero Base */
+    --color-brand-navy: #1e293b; /* Card backgrounds & section dividers */
+    --color-brand-gold: #c5a059; /* Logo Accent Metallic Gold */
+    --color-brand-gold-hover: #b08a43; /* Darker Gold for Buttons */
+    --color-brand-gold-light: #fdfbf7; /* Light Champagne Tint Background */
+    --color-brand-slate: #475569; /* Body Text Gray */
+    --color-brand-light: #f8fafc; /* Page Secondary Background */
+}
+
+/* --- Base Body & Typography Styling --- */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        background-color: #ffffff;
+        color: #334155;
+        overflow-x: hidden;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-heading);
+        color: var(--color-brand-dark);
+        letter-spacing: -0.02em;
+    }
+}
+
+/* --- Custom Text Selection Highlight --- */
+::selection {
+    background-color: rgba(197, 160, 89, 0.25); /* Transparent Gold */
+    color: #0f172a;
+}
+
+::-moz-selection {
+    background-color: rgba(197, 160, 89, 0.25);
+    color: #0f172a;
+}
+
+/* --- Custom Scrollbar Styling --- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brand-gold);
+}
+
+/* --- Utility Component Classes --- */
+.btn-primary {
+    background-color: var(--color-brand-gold);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 12px rgba(197, 160, 89, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-brand-gold-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(197, 160, 89, 0.3);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
