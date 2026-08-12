@@ -1,12 +1,4 @@
 // src/services/pageMetaApi.js
-// Service layer over /api/page-meta (mounted in server.js).
-//
-// ⚠ CONTRACT NOTE: pageMetaController.js / pageMetaRoutes.js were not in the
-// files I could read, so the endpoints below follow the same RESTful shape as
-// your other resources + the PageMeta model. If your actual route file differs
-// (e.g. PUT instead of PATCH, or a { data } vs { pageMetas } envelope), adjust
-// the two spots marked [VERIFY]. The component consumes results through
-// normalizePageMetaList() so a differently-named array won't break the UI.
 import api from "./api";
 
 export const pageMetaApi = {

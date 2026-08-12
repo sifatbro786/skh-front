@@ -16,6 +16,32 @@
     --color-brand-gold-light: #fdfbf7; /* Light Champagne Tint Background */
     --color-brand-slate: #475569; /* Body Text Gray */
     --color-brand-light: #f8fafc; /* Page Secondary Background */
+
+    /* Backgrounds */
+    --color-surface: #f8fafc; /* = brand-light — page canvas */
+    --color-surface-raised: #ffffff; /* cards, table rows, drawers */
+    --color-surface-inset: #f1f5f9; /* table headers, inputs, code blocks */
+    --color-surface-dark: #0f172a; /* = brand-dark — sidebar, footer */
+    --color-surface-dark-raised: #1e293b; /* = brand-navy — cards on dark */
+
+    /* Text */
+    --color-content: #0f172a; /* primary copy on light */
+    --color-content-muted: #64748b; /* labels, secondary copy */
+    --color-content-subtle: #94a3b8; /* placeholders, timestamps, meta */
+    --color-content-inverse: #f8fafc; /* copy on dark surfaces */
+
+    /* Borders — ProtectedRoute uses `border-border-subtle`, the handoff spec says
+       `border-subtle`. Both are defined so neither reference silently no-ops. */
+    --color-border-subtle: #e2e8f0;
+    --color-subtle: #e2e8f0;
+    --color-border-strong: #cbd5e1;
+    --color-border-dark: #334155; /* dividers on navy — matches the email templates */
+
+    /* Status — kept off the default palette so toasts/badges stay brand-consistent */
+    --color-success: #15803d;
+    --color-warning: #b45309;
+    --color-danger: #b91c1c;
+    --color-info: #0369a1;
 }
 
 /* --- Base Body & Typography Styling --- */
@@ -79,7 +105,7 @@
 /* --- Utility Component Classes --- */
 .btn-primary {
     background-color: var(--color-brand-gold);
-    color: #ffffff;
+    color: var(--color-brand-dark); /* #ffffff ছিল, এখন #0f172a — AA পাস করে */
     font-weight: 600;
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;

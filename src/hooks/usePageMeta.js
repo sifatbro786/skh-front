@@ -1,50 +1,39 @@
-// src/hooks/usePageMeta.js
+/* eslint-disable react-hooks/set-state-in-effect */
+// src/hooks/usePageMeta.js  — REPLACE the body of the effect
 import { useState, useEffect } from "react";
+import api from "../services/api";
 
 export const usePageMeta = (pageSlug) => {
     const [pageMeta, setPageMeta] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(Boolean(pageSlug));
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchPageMeta = async () => {
-            if (!pageSlug) {
-                setLoading(false);
-                return;
-            }
+        if (!pageSlug) {
+            setLoading(false);
+            return;
+        }
+        let active = true;
+        setLoading(true);
+        setError(null);
 
-            try {
-                setLoading(true);
-                setError(null);
+        api.get(`/page-meta/slug/${encodeURIComponent(pageSlug)}`)
+            .then(({ data }) => {
+                if (active) setPageMeta(data.pageMeta || null);
+            })
+            .catch((err) => {
+                if (!active) return;
+                // 404 = no row seeded for this slug yet. Render without meta.
+                if (err?.response?.status !== 404) setError(err.message);
+                setPageMeta(null);
+            })
+            .finally(() => {
+                if (active) setLoading(false);
+            });
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/page-meta/all`);
-                const data = await response.json();
-
-                if (data.success && Array.isArray(data.pageMetas)) {
-                    const foundMeta = data.pageMetas.find((meta) => {
-                        // Exact match
-                        if (meta.pageSlug === pageSlug) return true;
-                        // Case insensitive match
-                        if (meta.pageSlug?.toLowerCase() === pageSlug.toLowerCase()) return true;
-                        // Page name match
-                        if (meta.pageName?.toLowerCase() === pageSlug.toLowerCase()) return true;
-                        return false;
-                    });
-
-                    setPageMeta(foundMeta || null);
-                } else {
-                    console.error("❌ API response format error");
-                    setError("Invalid API response format");
-                }
-            } catch (err) {
-                console.error("💥 Fetch error:", err);
-                setError(err instanceof Error ? err.message : "An error occurred");
-            } finally {
-                setLoading(false);
-            }
+        return () => {
+            active = false;
         };
-
-        fetchPageMeta();
     }, [pageSlug]);
 
     return { pageMeta, loading, error };

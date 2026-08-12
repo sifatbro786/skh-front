@@ -1,11 +1,4 @@
 // src/services/authApi.js
-// Service layer over /api/auth for the flows AuthContext doesn't own:
-// password recovery + super_admin admin management. Mirrors the contract of
-// leadApi/bookingApi — every method returns response.data and lets axios
-// errors propagate to the caller, where authErrorMessage() extracts the copy.
-//
-// Login / me / change-password stay in AuthContext (they mutate session
-// state); everything here is stateless request plumbing.
 import api from "./api";
 
 export const authApi = {
