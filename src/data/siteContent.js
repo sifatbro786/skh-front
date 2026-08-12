@@ -23,7 +23,6 @@ export const SITE = {
 };
 
 export const HERO = {
-    eyebrow: "B2B Apparel Sourcing · Dhaka · Sydney",
     title: "Your sourcing partner for apparel that ships on time",
     subtitle:
         "Knitwear, woven, denim and home textiles produced across a vetted network of compliant factories — with in-house quality inspection at every stage.",
@@ -175,14 +174,7 @@ export const SUSTAINABLE_FABRICS = [
     { name: "TENCEL™ Lyocell", note: "Closed-loop production" },
 ];
 
-export const TARGET_MARKETS = [
-    "Australia",
-    "Europe",
-    "North America",
-    "Middle East",
-    "Asia",
-    "Africa",
-];
+export const TARGET_MARKETS = ["Australia", "Europe", "North America", "Middle East", "Asia"];
 
 /** Fallback only — the live values come from GET /api/stats via toOffices(). */
 export const OFFICES_FALLBACK = [
@@ -205,8 +197,18 @@ export const OFFICES_FALLBACK = [
 
 /** TODO: swap these placeholder URLs for the real profiles/number. */
 export const SOCIAL_LINKS = [
-    { id: "facebook", label: "Facebook", icon: FaFacebookF, href: "https://facebook.com/skhsourcing" },
-    { id: "instagram", label: "Instagram", icon: FaInstagram, href: "https://instagram.com/skhsourcing" },
+    {
+        id: "facebook",
+        label: "Facebook",
+        icon: FaFacebookF,
+        href: "https://facebook.com/skhsourcing",
+    },
+    {
+        id: "instagram",
+        label: "Instagram",
+        icon: FaInstagram,
+        href: "https://instagram.com/skhsourcing",
+    },
     { id: "whatsapp", label: "WhatsApp", icon: FaWhatsapp, href: "https://wa.me/8801842770200" },
 ];
 

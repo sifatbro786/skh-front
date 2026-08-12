@@ -75,7 +75,7 @@
 /* --- Custom Text Selection Highlight --- */
 ::selection {
     background-color: rgba(197, 160, 89, 0.25); /* Transparent Gold */
-    color: #fff;
+    color: #000;
 }
 
 ::-moz-selection {

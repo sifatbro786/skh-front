@@ -1,8 +1,11 @@
+// src/App.jsx
 import { Route, Routes } from "react-router-dom";
 import ClientLayout from "./layouts/ClientLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./router/ProtectedRoute";
 import Homepage from "./pages/client/Homepage";
+import ProductsPage from "./pages/client/ProductsPage";
+import ProductDetailPage from "./pages/client/ProductDetailPage";
 import LoginPage from "./pages/auth/LoginPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
@@ -17,6 +20,11 @@ export default function App() {
         <Routes>
             <Route element={<ClientLayout />}>
                 <Route path="/" element={<Homepage />} />
+                {/* Static-ish segments must not be shadowed by /products/:id —
+                    React Router ranks the literal path higher, but keep the
+                    order explicit for anyone reading the file. */}
+                <Route path="/products" element={<ProductsPage />} />
+                <Route path="/products/:id" element={<ProductDetailPage />} />
             </Route>
 
             {/* Auth */}
