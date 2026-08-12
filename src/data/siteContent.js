@@ -13,6 +13,7 @@ import {
     PackageCheck,
     Handshake,
 } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export const SITE = {
     name: "SKH Sourcing",
@@ -202,10 +203,32 @@ export const OFFICES_FALLBACK = [
     },
 ];
 
+/** TODO: swap these placeholder URLs for the real profiles/number. */
+export const SOCIAL_LINKS = [
+    { id: "facebook", label: "Facebook", icon: FaFacebookF, href: "https://facebook.com/skhsourcing" },
+    { id: "instagram", label: "Instagram", icon: FaInstagram, href: "https://instagram.com/skhsourcing" },
+    { id: "whatsapp", label: "WhatsApp", icon: FaWhatsapp, href: "https://wa.me/8801842770200" },
+];
+
 export const NAV_LINKS = [
     { to: "/", label: "Home", slug: "home" },
     { to: "/products", label: "Products", slug: "products" },
+    // { to: "/services", label: "Services", slug: "services" },
     { to: "/compliance", label: "Compliance", slug: "compliance" },
     { to: "/about", label: "About", slug: "about" },
     { to: "/contact", label: "Contact", slug: "contact" },
+];
+
+/** Office timezones for the footer's operational clock. Keyed by toOffices() id. */
+export const OFFICE_TIMEZONES = { bd: "Asia/Dhaka", au: "Australia/Sydney" };
+
+/** Fallback marquee items until certifications are seeded. */
+export const COMPLIANCE_STANDARDS = [
+    { name: "OEKO-TEX® Standard 100" },
+    { name: "GOTS" },
+    { name: "BSCI" },
+    { name: "WRAP" },
+    { name: "GRS" },
+    { name: "Sedex / SMETA" },
+    { name: "BCI" },
 ];

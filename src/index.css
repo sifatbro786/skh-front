@@ -75,7 +75,7 @@
 /* --- Custom Text Selection Highlight --- */
 ::selection {
     background-color: rgba(197, 160, 89, 0.25); /* Transparent Gold */
-    color: #0f172a;
+    color: #fff;
 }
 
 ::-moz-selection {
@@ -123,4 +123,65 @@
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* --- Phase 1 additions: motion tokens ------------------------------------ */
+@theme {
+    --animate-marquee: marquee 42s linear infinite;
+    --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+
+    @keyframes marquee {
+        from {
+            transform: translate3d(0, 0, 0);
+        }
+        to {
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+    @keyframes shimmer {
+        100% {
+            transform: translateX(100%);
+        }
+    }
+}
+
+/* Shimmer bar for skeletons — masked by the parent's overflow-hidden. */
+.shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+    animation: var(--animate-shimmer);
+}
+
+/* Selvedge rule — the recurring brand device (gold hairline + node). */
+.selvedge {
+    position: relative;
+    padding-left: 1.25rem;
+}
+.selvedge::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    bottom: 0.35em;
+    width: 2px;
+    background: var(--color-brand-gold);
+}
+.selvedge::after {
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 0.35em;
+    width: 6px;
+    height: 6px;
+    background: var(--color-brand-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shimmer::after,
+    [data-marquee-track] {
+        animation: none !important;
+    }
 }
