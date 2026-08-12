@@ -14,6 +14,7 @@ import Overview from "./pages/admin/Overview";
 import PageMetaManagement from "./pages/admin/PageMetaManagement";
 import UserManagement from "./pages/admin/UserManagement";
 import AccountSettings from "./pages/admin/AccountSettings";
+import CompliancePage from "./pages/client/CompliancePage";
 
 export default function App() {
     return (
@@ -25,6 +26,7 @@ export default function App() {
                     order explicit for anyone reading the file. */}
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/products/:id" element={<ProductDetailPage />} />
+                <Route path="/compliance" element={<CompliancePage />} />
             </Route>
 
             {/* Auth */}
