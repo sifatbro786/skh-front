@@ -1,6 +1,12 @@
 // src/components/ui/Button.jsx
 // Multi-variant button. `as` allows <Link as> / <a as> without losing styling.
 // React 19: `ref` is a plain prop, no forwardRef wrapper needed.
+//
+// Phase 2 change: added `outline-inverse`. The existing `outline` variant sets
+// text-content (near-black) and border-border-strong, which is invisible on the
+// navy hero. Overriding those through className would be a coin flip — two
+// utilities for the same CSS property resolve by stylesheet order, not by the
+// order they appear in the class attribute — so it has to be a real variant.
 import { Loader2 } from "lucide-react";
 
 const BASE =
@@ -17,6 +23,9 @@ const VARIANTS = {
     secondary: "bg-surface-dark text-content-inverse hover:bg-brand-navy hover:-translate-y-px",
     outline:
         "border border-border-strong bg-transparent text-content hover:border-brand-gold hover:text-brand-gold",
+    "outline-inverse":
+        "border border-white/25 bg-transparent text-content-inverse " +
+        "hover:border-brand-gold hover:bg-white/5 hover:text-brand-gold",
     ghost: "bg-transparent text-content-muted hover:bg-surface-inset hover:text-content",
     danger: "bg-danger text-white hover:brightness-110",
 };
@@ -41,12 +50,17 @@ export default function Button({
     ...props
 }) {
     const isNative = Tag === "button";
+    // Fallback so a typo'd variant degrades to a styled button instead of
+    // interpolating the string "undefined" into className.
+    const variantClass = VARIANTS[variant] || VARIANTS.primary;
+    const sizeClass = SIZES[size] || SIZES.md;
+
     return (
         <Tag
             {...(isNative ? { type: props.type || "button", disabled: disabled || loading } : {})}
             aria-busy={loading || undefined}
             data-loading={loading ? "" : undefined}
-            className={`${BASE} ${VARIANTS[variant]} ${SIZES[size]} ${fullWidth ? "w-full" : ""} ${className}`}
+            className={`${BASE} ${variantClass} ${sizeClass} ${fullWidth ? "w-full" : ""} ${className}`}
             {...props}
         >
             {loading && <Loader2 className="absolute h-4 w-4 animate-spin" aria-hidden="true" />}

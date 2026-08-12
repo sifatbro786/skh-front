@@ -1,8 +1,12 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 // src/components/ui/StatCounter.jsx
-// Count-up on first viewport entry. Tabular figures so the number doesn't jitter
-// while animating. Reduced-motion users get the final value immediately.
-import { useEffect, useRef, useState } from "react";
+// Count-up on first viewport entry.
+//
+// Rewrite note (Phase 2): the previous version called setState on every animation
+// frame, so four counters re-rendered React ~360 times over the run. The value is
+// write-only display text — it now goes straight to the DOM node, which drops the
+// re-renders to zero and lets the `react-hooks/set-state-in-effect` disable go.
+// Tabular figures keep the number from jittering as digits change width.
+import { useLayoutEffect, useRef } from "react";
 import { animate, useInView, useReducedMotion } from "framer-motion";
 
 const formatter = new Intl.NumberFormat("en-US");
@@ -17,21 +21,30 @@ export default function StatCounter({
     className = "",
 }) {
     const ref = useRef(null);
+    const numberRef = useRef(null);
     const inView = useInView(ref, { once: true, margin: "-15% 0px" });
     const reduced = useReducedMotion();
-    const [display, setDisplay] = useState(0);
     const target = Number(value) || 0;
 
-    useEffect(() => {
-        if (!inView) return;
-        if (reduced) {
-            setDisplay(target);
-            return;
+    // useLayoutEffect, not useEffect: the JSX seeds the final value (so a
+    // pre-hydration paint and screen readers never see a bare 0), and this has
+    // to reset it to 0 BEFORE the browser paints or the number visibly flashes.
+    useLayoutEffect(() => {
+        const node = numberRef.current;
+        if (!node) return undefined;
+
+        if (!inView || reduced) {
+            // Off-screen or reduced-motion: land on the final value with no run.
+            node.textContent = formatter.format(inView ? target : 0);
+            return undefined;
         }
+
         const controls = animate(0, target, {
             duration,
             ease: [0.16, 1, 0.3, 1],
-            onUpdate: (v) => setDisplay(Math.round(v)),
+            onUpdate: (v) => {
+                node.textContent = formatter.format(Math.round(v));
+            },
         });
         return () => controls.stop();
     }, [inView, target, duration, reduced]);
@@ -41,9 +54,7 @@ export default function StatCounter({
     return (
         <div ref={ref} className={`group ${className}`}>
             <div
-                className={`h-px w-10 transition-all duration-500 group-hover:w-16 ${
-                    dark ? "bg-brand-gold" : "bg-brand-gold"
-                }`}
+                className="h-px w-10 bg-brand-gold transition-all duration-500 group-hover:w-16"
                 aria-hidden="true"
             />
             <p
@@ -52,11 +63,13 @@ export default function StatCounter({
                 }`}
             >
                 {prefix}
-                {formatter.format(display)}
+                {/* Seeded with the real value so no-JS / pre-hydration paint and
+                    screen readers never see a bare 0. */}
+                <span ref={numberRef}>{formatter.format(target)}</span>
                 <span className="text-brand-gold">{suffix}</span>
             </p>
             <p
-                className={`mt-2 text-[11px] font-bold uppercase tracking-[0.24em] ${
+                className={`mt-2 text-[11px] font-bold tracking-[0.24em] uppercase ${
                     dark ? "text-content-subtle" : "text-content-muted"
                 }`}
             >

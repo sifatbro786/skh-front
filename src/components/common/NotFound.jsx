@@ -23,20 +23,9 @@ export default function NotFound() {
                 className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,transparent,#0f172a_75%)]"
             />
 
-            {/* Minimal header */}
-            <header className="relative mx-auto flex h-18 w-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-                <Link to="/" aria-label="SKH Sourcing — home" className="rounded">
-                    <img src="/logo.png" alt="SKH Sourcing" className="h-9 w-auto sm:h-10" />
-                </Link>
-            </header>
-
             {/* Content */}
             <main className="relative flex flex-1 items-center justify-center px-4 py-16">
                 <div className="w-full max-w-xl text-center">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-border-dark bg-white/5 px-3 py-1 text-[10px] font-bold tracking-[0.28em] text-brand-gold uppercase">
-                        Error 404
-                    </span>
-
                     <p className="mt-8 font-heading text-[96px] leading-none font-extrabold tracking-[-0.04em] text-content-inverse tabular-nums sm:text-[128px]">
                         4<span className="text-brand-gold">0</span>4
                     </p>

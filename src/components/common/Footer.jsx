@@ -15,7 +15,6 @@ import {
     SITE,
     SOCIAL_LINKS,
 } from "../../data/siteContent";
-import CertMarquee from "../ui/CertMarquee";
 
 /** Pure helper (not a hook) so it can be called inside .map() safely. */
 const officeClock = (now, timeZone) => {
@@ -61,7 +60,10 @@ const OfficeBlock = ({ office, now }) => {
             </div>
             <address className="mt-4 space-y-3 text-sm not-italic text-content-subtle">
                 <span className="flex gap-2.5">
-                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" aria-hidden="true" />
+                    <MapPin
+                        className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold"
+                        aria-hidden="true"
+                    />
                     <span className="leading-relaxed">{office.address}</span>
                 </span>
                 <a
@@ -121,10 +123,6 @@ export default function Footer() {
 
     return (
         <footer className="bg-surface-dark text-content-inverse">
-            <div className="border-b border-border-dark">
-                <CertMarquee items={certs} tone="dark" className="mx-auto max-w-7xl" />
-            </div>
-
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="grid gap-12 lg:grid-cols-12">
                     {/* Brand — left */}
