@@ -64,7 +64,7 @@ export default function AboutPage() {
             />
 
             <DirectorNote />
-            <CapabilityBand />
+            <CapabilityBand packagingUnit={stats?.packagingUnit} />
             <FloorGallery />
             <MilestoneLedger />
 

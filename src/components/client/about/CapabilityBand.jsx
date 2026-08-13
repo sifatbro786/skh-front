@@ -6,10 +6,14 @@
 // leader because the right-hand column carries real information (the scheme the
 // fibre is certified under); the markets column uses nodes instead so the two
 // halves don't read as the same table twice.
-import { SUSTAINABLE_FABRICS, TARGET_MARKETS } from "../../../data/siteContent";
+import { PACKAGING_UNIT, SUSTAINABLE_FABRICS, TARGET_MARKETS } from "../../../data/siteContent";
 import SectionHeading from "../../ui/SectionHeading";
 
-export default function CapabilityBand() {
+export default function CapabilityBand({ packagingUnit }) {
+    // Live value from /api/stats when About passes it down; static profile
+    // fallback otherwise so the row is never blank on a cold/failed stats call.
+    const unit = packagingUnit || PACKAGING_UNIT;
+
     return (
         <section className="bg-surface-dark py-16 sm:py-20" aria-labelledby="capability">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -72,6 +76,19 @@ export default function CapabilityBand() {
                             forms, certificates of origin and buyer-specific packing manuals.
                         </p>
                     </div>
+                </div>
+
+                {/* Accessories / packaging unit — a real profile detail (labels,
+                    trims, packaging handled through a named in-house partner). */}
+                <div className="mt-12 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-border-dark pt-6">
+                    <span className="font-heading text-[10px] font-bold tracking-[0.28em] text-brand-gold uppercase">
+                        Accessories &amp; packaging unit
+                    </span>
+                    <span
+                        className="mb-1 hidden min-w-4 flex-1 border-b border-dotted border-white/20 sm:block"
+                        aria-hidden="true"
+                    />
+                    <span className="text-[14px] font-semibold text-content-inverse">{unit}</span>
                 </div>
             </div>
         </section>

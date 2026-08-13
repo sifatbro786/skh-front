@@ -33,7 +33,12 @@ const monogram = (title = "") => {
 
 function CertificationCard({ cert, muted }) {
     const logo = muted ? null : certLogoUrl(cert);
-    const pdf = muted ? null : certPdfUrl(cert);
+    // Only certificates SKH actually holds expose a download. Partner-scope rows
+    // are standards our audited mills are certified against — we never host a
+    // downloadable third-party certificate for them, even if a pdfPath exists.
+    const isHeld = cert.scope === "held";
+    const pdf = muted || !isHeld ? null : certPdfUrl(cert);
+    const isPartner = !muted && cert.scope === "partner";
 
     return (
         <li className="group relative flex flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface-raised p-5 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-brand-gold/45 hover:shadow-[0_22px_50px_-38px_rgba(15,23,42,0.65)] motion-reduce:transform-none motion-reduce:transition-none sm:p-6">
@@ -74,13 +79,17 @@ function CertificationCard({ cert, muted }) {
                 whatever the title wraps to. */}
             <div className="mt-auto flex items-baseline gap-3 pt-6">
                 <span className="text-[10px] font-bold tracking-[0.2em] text-content-muted uppercase">
-                    Certificate
+                    {isPartner ? "Standard" : "Certificate"}
                 </span>
                 <span
                     className="mb-1 min-w-4 flex-1 border-b border-dotted border-border-strong"
                     aria-hidden="true"
                 />
-                {pdf ? (
+                {isPartner ? (
+                    <span className="font-mono text-[11px] tracking-widest text-content-subtle uppercase">
+                        Partner-audited
+                    </span>
+                ) : pdf ? (
                     <a
                         href={pdf}
                         download

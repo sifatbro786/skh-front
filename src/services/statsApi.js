@@ -11,6 +11,8 @@ const NUMERIC = [
 
 const CONTACT = ["primaryEmail", "inquiryEmail", "bdPhone", "bdAddress", "auPhone", "auAddress"];
 
+const STRINGS = ["packagingUnit"];
+
 const pick = (source = {}, keys) =>
     keys.reduce((acc, k) => {
         if (source[k] !== undefined && source[k] !== null && source[k] !== "") acc[k] = source[k];
@@ -27,10 +29,11 @@ export const statsApi = {
      * flattens them to dot-notation so a partial payload doesn't wipe siblings.
      * Any non-finite or negative number is a 400.
      */
-    update: ({ contactDetails, ...numbers } = {}) =>
+    update: ({ contactDetails, ...rest } = {}) =>
         api
             .patch("/stats", {
-                ...pick(numbers, NUMERIC),
+                ...pick(rest, NUMERIC),
+                ...pick(rest, STRINGS),
                 ...(contactDetails ? { contactDetails: pick(contactDetails, CONTACT) } : {}),
             })
             .then((r) => r.data),

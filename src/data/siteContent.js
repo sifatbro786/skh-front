@@ -28,7 +28,8 @@ export const HERO = {
         "Knitwear, woven, denim and home textiles produced across a vetted network of compliant factories — with in-house quality inspection at every stage.",
     primaryCta: { label: "Request a Quote", action: "rfq" },
     secondaryCta: { label: "Browse Catalog", to: "/products" },
-    trustLine: "Trusted by importers across Australia, Europe, North America and the Middle East.",
+    trustLine:
+        "Trusted by importers across Australia, Europe, North America, the Middle East, Asia and Africa.",
 };
 
 /* ------------------------------- Services ------------------------------- */
@@ -167,14 +168,71 @@ export const PROMISES = [
 /* --------------------------- Reference content -------------------------- */
 
 export const SUSTAINABLE_FABRICS = [
-    { name: "BCI Cotton", note: "Better Cotton Initiative sourced" },
-    { name: "Organic Cotton", note: "GOTS-certified supply chain" },
-    { name: "LENZING™ EcoVero™", note: "Certified viscose" },
+    { name: "BCI / Organic Cotton", note: "Better Cotton + GOTS supply chain" },
+    { name: "LENZING™ EcoVero™ / LIVAECO™", note: "Certified low-impact viscose" },
     { name: "Recycled Polyester", note: "GRS-traceable rPET" },
-    { name: "TENCEL™ Lyocell", note: "Closed-loop production" },
+    { name: "Sustainable Denim", note: "Low-water, laser & ozone finishing" },
+    { name: "Green Wash", note: "Reduced-chemistry wash programme" },
+    { name: "Herbal & Natural Dyes", note: "Plant-based, reduced-impact dyeing" },
+    { name: "Belgian Linen", note: "European flax, traceable origin" },
+    { name: "TENCEL™ & REFIBRA™ Lyocell", note: "Closed-loop, recycled-content pulp" },
+    { name: "Sustainable Packaging", note: "Recyclable / recycled-poly solutions" },
 ];
 
-export const TARGET_MARKETS = ["Australia", "Europe", "North America", "Middle East", "Asia"];
+/**
+ * The 21 fabric families named in the company profile ("Types of Fabrics").
+ * Reference list for a fabric library section / catalog fabric filter — NOT a
+ * catalog category (those live in the backend PRODUCT_CATEGORIES enum).
+ */
+export const FABRIC_TYPES = [
+    "Cotton",
+    "Velvet",
+    "Jersey",
+    "Silk",
+    "Wool",
+    "Denim",
+    "Satin",
+    "Jacquard",
+    "Linen",
+    "Rayon",
+    "Chiffon",
+    "Chenille",
+    "Baize",
+    "Charmeuse",
+    "Cheviot",
+    "Dimity",
+    "Drill",
+    "Felt",
+    "Twill",
+    "Poplin",
+    "Georgette",
+];
+
+/** The 10-point "We Inspect" QC protocol from the profile, in inspection order. */
+export const QC_CHECKPOINTS = [
+    "Raw materials",
+    "Fabric quality",
+    "Stitching",
+    "Measurements",
+    "Printing",
+    "Embroidery",
+    "Finishing",
+    "Packaging",
+    "Carton inspection",
+    "Final random inspection",
+];
+
+/** Fallback only — the live value comes from GET /api/stats (stats.packagingUnit). */
+export const PACKAGING_UNIT = "Ruby Printing & Packaging";
+
+export const TARGET_MARKETS = [
+    "Australia",
+    "Europe",
+    "North America",
+    "Middle East",
+    "Asia",
+    "Africa",
+];
 
 /** Fallback only — the live values come from GET /api/stats via toOffices(). */
 export const OFFICES_FALLBACK = [
