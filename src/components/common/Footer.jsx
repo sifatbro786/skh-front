@@ -137,7 +137,7 @@ export default function Footer() {
                             {SITE.tagline}. Inspected by our own QC team before anything ships.
                         </p>
                         <p className="mt-6 text-[11px] tracking-[0.24em] text-content-subtle uppercase tabular-nums">
-                            Est. {SITE.established} · {SITE.domains[0]}
+                            A decade of sourcing · {SITE.domains[0]}
                         </p>
                         <div className="mt-6 flex items-center gap-3">
                             {SOCIAL_LINKS.map(({ id, label, icon: Icon, href }) => (

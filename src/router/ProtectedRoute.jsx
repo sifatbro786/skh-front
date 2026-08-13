@@ -15,7 +15,18 @@ function BrandSpinner() {
     );
 }
 
-export default function ProtectedRoute({ children, requireAuth = true, requireAdmin = false }) {
+/**
+ * `requireRole` mirrors the backend's restrictTo(): without it, an `admin` who
+ * types /admin/users directly gets the screen and then watches every request
+ * 403. Bouncing to the console index is the honest outcome. Cosmetic only —
+ * the server is still the authority.
+ */
+export default function ProtectedRoute({
+    children,
+    requireAuth = true,
+    requireAdmin = false,
+    requireRole = null,
+}) {
     const { user, isLoading } = useAuth();
     const location = useLocation();
 
@@ -26,6 +37,9 @@ export default function ProtectedRoute({ children, requireAuth = true, requireAd
     }
     if (requireAdmin && (!user || (user.role !== "admin" && user.role !== "super_admin"))) {
         return <Navigate to="/" replace />;
+    }
+    if (requireRole && user?.role !== requireRole) {
+        return <Navigate to="/admin" replace />;
     }
     return children;
 }

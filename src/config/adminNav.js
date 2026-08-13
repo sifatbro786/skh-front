@@ -6,6 +6,12 @@
 // disabled row with a "Soon" tag instead of a link, so nobody lands on the
 // in-shell 404 by clicking their own sidebar. Flip the flag in the same commit
 // that adds the route.
+//
+// Phase 3: every screen is now built, so all rows are ready. The `to` values
+// here are canonical — App.jsx must match them exactly. Note the Page SEO row
+// points at /admin/page-meta, while the route was previously registered as
+// "pagemeta" (i.e. /admin/pagemeta), so this sidebar link 404'd. App.jsx is
+// corrected to "page-meta" in the same commit.
 import {
     BadgeCheck,
     Building2,
@@ -39,7 +45,7 @@ export const ADMIN_NAV = [
                 label: "Products",
                 icon: Shirt,
                 title: "Products",
-                ready: false,
+                ready: true,
             },
             {
                 to: "/admin/inquiries",
@@ -47,14 +53,14 @@ export const ADMIN_NAV = [
                 icon: Inbox,
                 title: "Inquiries",
                 badge: "inquiries", // key into the badges map from DashboardLayout
-                ready: false,
+                ready: true,
             },
             {
                 to: "/admin/certifications",
                 label: "Certifications",
                 icon: BadgeCheck,
                 title: "Certifications",
-                ready: false,
+                ready: true,
             },
         ],
     },
@@ -66,7 +72,7 @@ export const ADMIN_NAV = [
                 label: "Company",
                 icon: Building2,
                 title: "Company Settings",
-                ready: false,
+                ready: true,
             },
             {
                 to: "/admin/page-meta",

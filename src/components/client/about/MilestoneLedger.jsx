@@ -1,10 +1,11 @@
 // src/components/client/about/MilestoneLedger.jsx
 // The timeline, as a ledger rather than a card row: a single gold spine with a
-// node per entry, the year set in mono tabular figures.
+// node per entry, each row carrying an `01`-style index in mono tabular figures.
 //
-// Deliberately NOT the ProcessRail treatment — that rail is numbered 01–04
-// because the steps are a procedure the buyer will go through. This is history:
-// the years are the figures, so no index numbers are added on top of them.
+// The entries are undated by design (see MILESTONES in siteContent) — the ledger
+// reads as an ordered track record, not a calendar. The index is the figure the
+// selvedge device leans on elsewhere, so it stays on-brand without asserting
+// specific years the profile never claimed.
 //
 // The last row is computed in JS rather than with a `group-last:` variant —
 // composed group variants are easy to get subtly wrong, and this has to close
@@ -30,7 +31,7 @@ export default function MilestoneLedger({ milestones = MILESTONES }) {
 
                         return (
                             <li
-                                key={milestone.year}
+                                key={milestone.title}
                                 className={`relative flex gap-5 sm:gap-8 ${isLast ? "" : "pb-9"}`}
                             >
                                 {isLast ? null : (
@@ -45,7 +46,7 @@ export default function MilestoneLedger({ milestones = MILESTONES }) {
                                 />
 
                                 <span className="ml-6 w-12 shrink-0 pt-px font-mono text-[13px] font-semibold text-brand-gold tabular-nums sm:ml-8">
-                                    {milestone.year}
+                                    {String(index + 1).padStart(2, "0")}
                                 </span>
 
                                 <div

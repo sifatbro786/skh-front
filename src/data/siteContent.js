@@ -106,28 +106,23 @@ export const PROCESS = [
 
 export const MILESTONES = [
     {
-        year: "2014",
         title: "Founded in Dhaka",
         body: "Started as a buying house serving two European importers.",
     },
     {
-        year: "2017",
-        title: "Denim & outerwear added",
-        body: "Expanded the vetted factory network beyond basic knitwear.",
+        title: "Expanded into denim & outerwear",
+        body: "Grew the vetted factory network beyond basic knitwear.",
     },
     {
-        year: "2020",
-        title: "In-house QC team",
+        title: "In-house quality control team",
         body: "Brought quality inspection fully in-house instead of outsourcing to third parties.",
     },
     {
-        year: "2022",
-        title: "Sustainable line",
+        title: "Sustainable materials programme",
         body: "Introduced BCI, organic cotton and recycled polyester programmes.",
     },
     {
-        year: "2024",
-        title: "Australia office",
+        title: "Australia office opened",
         body: "Opened the Liverpool, NSW office to serve the APAC market directly.",
     },
 ];
