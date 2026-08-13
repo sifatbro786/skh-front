@@ -15,6 +15,9 @@ import PageMetaManagement from "./pages/admin/PageMetaManagement";
 import UserManagement from "./pages/admin/UserManagement";
 import AccountSettings from "./pages/admin/AccountSettings";
 import CompliancePage from "./pages/client/CompliancePage";
+import AboutPage from "./pages/client/AboutPage";
+import ContactPage from "./pages/client/ContactPage";
+import AdminNotFound from "./pages/admin/AdminNotFound";
 
 export default function App() {
     return (
@@ -27,6 +30,8 @@ export default function App() {
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/products/:id" element={<ProductDetailPage />} />
                 <Route path="/compliance" element={<CompliancePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
             </Route>
 
             {/* Auth */}
@@ -44,11 +49,12 @@ export default function App() {
                 }
             >
                 <Route index element={<Overview />} />
-                <Route path="page-meta" element={<PageMetaManagement />} />
-
-                {/* super_admin gate lives inside UserManagement */}
+                <Route path="pagemeta" element={<PageMetaManagement />} />
                 <Route path="users" element={<UserManagement />} />
                 <Route path="settings" element={<AccountSettings />} />
+
+                {/* Fallback */}
+                <Route path="*" element={<AdminNotFound />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

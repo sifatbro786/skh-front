@@ -10,6 +10,8 @@ import { useAsync } from "../../hooks/useAsync";
 import { useDebounce } from "../../hooks/useDebounce";
 import { productApi } from "../../services/productApi";
 import { SITE } from "../../data/siteContent";
+import { STOCK_PHOTOS } from "../../data/stockPhotos";
+import PageHeader from "../../components/client/PageHeader";
 import ProductCard from "../../components/client/ProductCard";
 import CategoryRail from "../../components/client/products/CategoryRail";
 import CatalogToolbar from "../../components/client/products/CatalogToolbar";
@@ -21,14 +23,6 @@ import EmptyState from "../../components/ui/EmptyState";
 import { SkeletonProductCard } from "../../components/ui/Skeleton";
 
 const LIMIT = 12; // backend caps at 60; 12 keeps 4-col rows even
-
-const LATTICE = {
-    backgroundImage:
-        "repeating-linear-gradient(90deg, rgba(197,160,89,0.09) 0 1px, transparent 1px 76px)," +
-        "repeating-linear-gradient(0deg, rgba(197,160,89,0.06) 0 1px, transparent 1px 76px)",
-    maskImage: "radial-gradient(120% 120% at 85% 0%, #000 0%, transparent 70%)",
-    WebkitMaskImage: "radial-gradient(120% 120% at 85% 0%, #000 0%, transparent 70%)",
-};
 
 export default function ProductsPage() {
     const { pageMeta } = usePageMeta("products");
@@ -167,75 +161,45 @@ export default function ProductsPage() {
             {pageMeta?.canonicalUrl ? <link rel="canonical" href={pageMeta.canonicalUrl} /> : null}
 
             {/* ------------------------------ Header ------------------------ */}
-            <section className="relative overflow-hidden bg-surface-dark pt-10 pb-12 sm:pt-14 sm:pb-16">
-                <div
-                    className="pointer-events-none absolute inset-0"
-                    style={LATTICE}
-                    aria-hidden="true"
-                />
-                <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <nav aria-label="Breadcrumb">
-                        <ol className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] text-white/40 uppercase">
-                            <li>
-                                <Link to="/" className="transition-colors hover:text-brand-gold">
-                                    Home
-                                </Link>
-                            </li>
-                            <li aria-hidden="true">/</li>
-                            <li className="text-brand-gold">Catalog</li>
-                        </ol>
-                    </nav>
-
-                    <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-end">
-                        <div>
-                            <h1 className="font-heading text-4xl leading-[1.08] font-extrabold tracking-[-0.03em] text-content-inverse sm:text-5xl">
-                                {category ? category : "The full range"}
-                            </h1>
-                            {/* <div className="mt-5 flex items-center gap-2" aria-hidden="true">
-                                <span className="h-1.5 w-1.5 bg-brand-gold" />
-                                <span className="h-px w-20 bg-linear-to-r from-brand-gold to-transparent" />
-                            </div> */}
-                            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-content-subtle">
-                                Every style here is made to order. Fabric, wash, trims and packaging
-                                are open to your spec — these are starting points, not a fixed line
-                                sheet.
-                            </p>
-                        </div>
-
-                        {/* Search sits in the header because it's the primary action
-                            on this page, not a toolbar afterthought. */}
-                        <div className="lg:justify-self-end lg:pb-1">
-                            <label htmlFor="catalog-search" className="sr-only">
-                                Search the catalog
-                            </label>
-                            <div className="relative">
-                                <Search
-                                    className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-white/40"
-                                    aria-hidden="true"
-                                />
-                                <input
-                                    id="catalog-search"
-                                    type="search"
-                                    value={term}
-                                    onChange={(e) => setTerm(e.target.value)}
-                                    placeholder="Search style, code or fabric…"
-                                    className="h-12 w-full rounded-lg border border-white/15 bg-white/5 pr-10 pl-11 text-sm text-content-inverse placeholder:text-white/35 transition-colors outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/25 lg:w-104"
-                                />
-                                {term ? (
-                                    <button
-                                        type="button"
-                                        onClick={() => setTerm("")}
-                                        aria-label="Clear search"
-                                        className="absolute top-1/2 right-3 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-md text-white/45 transition-colors hover:bg-white/10 hover:text-content-inverse focus-visible:ring-2 focus-visible:ring-brand-gold/50 focus-visible:outline-none"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
-                                ) : null}
-                            </div>
+            <PageHeader
+                crumb="Catalog"
+                title={category ? category : "The full range"}
+                intro="Every style here is made to order. Fabric, wash, trims and packaging are open to your spec — these are starting points, not a fixed line sheet."
+                image={STOCK_PHOTOS.denimStack}
+                aside={
+                    /* Search sits in the header because it's the primary action on
+                       this page, not a toolbar afterthought. */
+                    <div>
+                        <label htmlFor="catalog-search" className="sr-only">
+                            Search the catalog
+                        </label>
+                        <div className="relative">
+                            <Search
+                                className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-white/40"
+                                aria-hidden="true"
+                            />
+                            <input
+                                id="catalog-search"
+                                type="search"
+                                value={term}
+                                onChange={(e) => setTerm(e.target.value)}
+                                placeholder="Search style, code or fabric…"
+                                className="h-12 w-full rounded-lg border border-white/15 bg-white/10 pr-10 pl-11 text-sm text-content-inverse backdrop-blur-sm placeholder:text-white/35 transition-colors outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/25"
+                            />
+                            {term ? (
+                                <button
+                                    type="button"
+                                    onClick={() => setTerm("")}
+                                    aria-label="Clear search"
+                                    className="absolute top-1/2 right-3 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-md text-white/45 transition-colors hover:bg-white/10 hover:text-content-inverse focus-visible:ring-2 focus-visible:ring-brand-gold/50 focus-visible:outline-none"
+                                >
+                                    <X className="h-4 w-4" />
+                                </button>
+                            ) : null}
                         </div>
                     </div>
-                </div>
-            </section>
+                }
+            />
 
             {/* ------------------------------- Body ------------------------- */}
             <section className="bg-surface py-10 sm:py-14">

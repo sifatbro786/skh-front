@@ -92,10 +92,7 @@ export default function AuthShell({ eyebrow, title, description, footer, childre
                 />
 
                 <div className="relative flex items-center gap-2.5">
-                    <span className="h-7 w-0.75 bg-brand-gold" />
-                    <span className="font-heading text-lg font-extrabold text-content-inverse tracking-[-0.02em]">
-                        SKH <span className="text-brand-gold">Sourcing</span>
-                    </span>
+                    <img src="/logo.png" alt="logo" className="h-10 w-auto shrink-0" />
                 </div>
 
                 <motion.blockquote

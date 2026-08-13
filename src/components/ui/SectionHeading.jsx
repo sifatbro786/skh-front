@@ -4,13 +4,11 @@ export default function SectionHeading({
     eyebrow,
     title,
     subtitle,
-    align = "left",
     tone = "light", // "light" | "dark" (on bg-surface-dark)
     action,
     className = "",
 }) {
     const dark = tone === "dark";
-    const centered = align === "center";
 
     return (
         <div
@@ -18,7 +16,7 @@ export default function SectionHeading({
                 action ? "md:flex-row md:items-end md:justify-between" : ""
             } ${className}`}
         >
-            <div className={`max-w-2xl ${centered ? "mx-auto text-center" : ""}`}>
+            <div className={`max-w-2xl`}>
                 {eyebrow ? (
                     <span
                         className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.28em] ${
@@ -35,16 +33,14 @@ export default function SectionHeading({
                 <h2
                     className={`mt-4 font-heading text-3xl leading-[1.12] font-extrabold tracking-[-0.02em] sm:text-4xl ${
                         dark ? "text-content-inverse" : "text-content"
-                    } ${centered ? "" : "selvedge"}`}
+                    }`}
                 >
                     {title}
                 </h2>
 
                 {subtitle ? (
                     <p
-                        className={`mt-4 text-[15px] leading-relaxed ${
-                            centered ? "" : "pl-5"
-                        } ${dark ? "text-content-subtle" : "text-content-muted"}`}
+                        className={`mt-4 text-[15px] leading-relaxed ${dark ? "text-content-subtle" : "text-content-muted"}`}
                     >
                         {subtitle}
                     </p>

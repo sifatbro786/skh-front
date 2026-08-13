@@ -11,6 +11,8 @@ import { statsApi } from "../../../services/statsApi";
 import { useAsync } from "../../../hooks/useAsync";
 import SectionHeading from "../../ui/SectionHeading";
 import StatCounter from "../../ui/StatCounter";
+import Photo from "../../ui/Photo";
+import { STOCK_PHOTOS } from "../../../data/stockPhotos";
 
 const PROTOCOL = [
     {
@@ -84,24 +86,36 @@ export default function AuditBand() {
                         </ol>
                     </div>
 
-                    {showNumbers ? (
-                        <div className="rounded-2xl border border-border-dark bg-surface-dark-raised p-6 sm:p-8 lg:self-start">
-                            <h3 className="font-heading text-[11px] font-bold tracking-[0.26em] text-content-subtle uppercase">
-                                Inspection at scale
-                            </h3>
-                            <div className="mt-6 space-y-8">
-                                {STAT_ROWS.map((row) => (
-                                    <StatCounter
-                                        key={row.key}
-                                        value={stats?.[row.key] ?? 0}
-                                        label={row.label}
-                                        suffix={row.suffix}
-                                        tone="dark"
-                                    />
-                                ))}
-                            </div>
+                    <div className="lg:self-start">
+                        {/* One photograph on an otherwise all-type band — the protocol
+                            beside it is about the floor, so show the floor. */}
+                        <div className="relative overflow-hidden rounded-2xl border border-border-dark">
+                            <Photo
+                                src={STOCK_PHOTOS.qualityDetail}
+                                className="h-44 w-full object-cover sm:h-52"
+                            />
+                            <div className="absolute inset-0 bg-linear-to-t from-surface-dark via-surface-dark/20 to-transparent" />
                         </div>
-                    ) : null}
+
+                        {showNumbers ? (
+                            <div className="mt-5 rounded-2xl border border-border-dark bg-surface-dark-raised p-6 sm:p-8">
+                                <h3 className="font-heading text-[11px] font-bold tracking-[0.26em] text-content-subtle uppercase">
+                                    Inspection at scale
+                                </h3>
+                                <div className="mt-6 space-y-8">
+                                    {STAT_ROWS.map((row) => (
+                                        <StatCounter
+                                            key={row.key}
+                                            value={stats?.[row.key] ?? 0}
+                                            label={row.label}
+                                            suffix={row.suffix}
+                                            tone="dark"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ) : null}
+                    </div>
                 </div>
             </div>
         </section>

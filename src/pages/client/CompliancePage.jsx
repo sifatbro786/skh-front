@@ -13,37 +13,13 @@ import { usePageMeta } from "../../hooks/usePageMeta";
 import { useAsync } from "../../hooks/useAsync";
 import { certificationApi } from "../../services/certificationApi";
 import { SITE, COMPLIANCE_STANDARDS } from "../../data/siteContent";
+import { STOCK_PHOTOS } from "../../data/stockPhotos";
 import { openRfq } from "../../lib/rfqBus";
+import PageHeader from "../../components/client/PageHeader";
 import SectionHeading from "../../components/ui/SectionHeading";
+import IndexPanel, { indexFigure } from "../../components/ui/IndexPanel";
 import Button from "../../components/ui/Button";
 import { AuditBand, CertificationGrid, StandardsList } from "../../components/client/compliance";
-
-// Same warp/weft lattice as the catalog header — one page-header treatment
-// across the client site.
-const LATTICE = {
-    backgroundImage:
-        "repeating-linear-gradient(90deg, rgba(197,160,89,0.09) 0 1px, transparent 1px 76px)," +
-        "repeating-linear-gradient(0deg, rgba(197,160,89,0.06) 0 1px, transparent 1px 76px)",
-    maskImage: "radial-gradient(120% 120% at 85% 0%, #000 0%, transparent 70%)",
-    WebkitMaskImage: "radial-gradient(120% 120% at 85% 0%, #000 0%, transparent 70%)",
-};
-
-const pad = (n) => String(n).padStart(2, "0");
-
-function IndexRow({ label, value }) {
-    return (
-        <div className="flex items-baseline gap-3">
-            <dt className="flex flex-1 items-baseline gap-3 text-[12px] text-content-subtle">
-                <span>{label}</span>
-                <span
-                    className="mb-1 min-w-4 flex-1 border-b border-dotted border-white/20"
-                    aria-hidden="true"
-                />
-            </dt>
-            <dd className="font-mono text-[13px] text-brand-gold tabular-nums">{value}</dd>
-        </div>
-    );
-}
 
 export default function CompliancePage() {
     const { pageMeta } = usePageMeta("compliance");
@@ -78,60 +54,30 @@ export default function CompliancePage() {
             {pageMeta?.canonicalUrl ? <link rel="canonical" href={pageMeta.canonicalUrl} /> : null}
 
             {/* ------------------------------ Header ---------------------------- */}
-            <section className="relative overflow-hidden bg-surface-dark pt-10 pb-12 sm:pt-14 sm:pb-16">
-                <div
-                    className="pointer-events-none absolute inset-0"
-                    style={LATTICE}
-                    aria-hidden="true"
-                />
-                <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <nav aria-label="Breadcrumb">
-                        <ol className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] text-white/40 uppercase">
-                            <li>
-                                <Link to="/" className="transition-colors hover:text-brand-gold">
-                                    Home
-                                </Link>
-                            </li>
-                            <li aria-hidden="true">/</li>
-                            <li className="text-brand-gold">Compliance</li>
-                        </ol>
-                    </nav>
-
-                    <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:items-end">
-                        <div>
-                            <h1 className="font-heading text-4xl leading-[1.08] font-extrabold tracking-[-0.03em] text-content-inverse sm:text-5xl">
-                                Documents you can ask for
-                            </h1>
-                            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-content-subtle">
-                                Every certificate we hold is listed here, with the issuing body and
-                                a downloadable copy where one exists. Anything not on file, ask and
-                                we&rsquo;ll pull it from the mill or the audit house.
-                            </p>
-                        </div>
-
-                        {/* Register index — the line-sheet device, with real counts. */}
-                        <div className="rounded-xl border border-border-dark bg-white/5 p-5 lg:justify-self-end">
-                            <h2 className="font-heading text-[10px] font-bold tracking-[0.26em] text-white/45 uppercase">
-                                The register
-                            </h2>
-                            <dl className="mt-4 space-y-2.5">
-                                <IndexRow
-                                    label="Certificates listed"
-                                    value={firstLoad ? "––" : pad(certifications.length)}
-                                />
-                                <IndexRow
-                                    label="Available as PDF"
-                                    value={firstLoad ? "––" : pad(withPdf)}
-                                />
-                                <IndexRow
-                                    label="Standards tracked"
-                                    value={pad(COMPLIANCE_STANDARDS.length)}
-                                />
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <PageHeader
+                crumb="Compliance"
+                title="Documents you can ask for"
+                intro="Every certificate we hold is listed here, with the issuing body and a downloadable copy where one exists. Anything not on file, ask and we'll pull it from the mill or the audit house."
+                image={STOCK_PHOTOS.fabricRolls}
+                aside={
+                    /* Register index — the line-sheet device, with real counts. */
+                    <IndexPanel
+                        title="The register"
+                        loading={firstLoad}
+                        rows={[
+                            {
+                                label: "Certificates listed",
+                                value: indexFigure(certifications.length),
+                            },
+                            { label: "Available as PDF", value: indexFigure(withPdf) },
+                            {
+                                label: "Standards tracked",
+                                value: indexFigure(COMPLIANCE_STANDARDS.length),
+                            },
+                        ]}
+                    />
+                }
+            />
 
             {/* --------------------------- Certificates ------------------------- */}
             <section className="bg-surface py-14 sm:py-20" aria-labelledby="certificates">
