@@ -5,8 +5,10 @@
 // whenever it's shot; nothing here should still be pointing at Unsplash by
 // launch.
 export const STOCK_PHOTOS = {
-    sewingFloor: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&q=80&auto=format&fit=crop",
-    denimStack: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=1600&q=80&auto=format&fit=crop",
+    sewingFloor:
+        "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&q=80&auto=format&fit=crop",
+    denimStack:
+        "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=1600&q=80&auto=format&fit=crop",
     qualityDetail:
         "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=1600&q=80&auto=format&fit=crop",
     fabricRolls:

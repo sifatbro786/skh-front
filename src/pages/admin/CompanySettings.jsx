@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 // src/pages/admin/CompanySettings.jsx
 // The singleton behind the homepage counters, the footer contact block and the
 // About page's accessories/packaging line.
@@ -68,10 +69,7 @@ export default function CompanySettings() {
         setSaving(true);
         try {
             await statsApi.update({
-                ...NUMBERS.reduce(
-                    (acc, f) => ({ ...acc, [f.key]: Number(form[f.key]) }),
-                    {},
-                ),
+                ...NUMBERS.reduce((acc, f) => ({ ...acc, [f.key]: Number(form[f.key]) }), {}),
                 packagingUnit: form.packagingUnit,
                 contactDetails: form.contactDetails,
             });

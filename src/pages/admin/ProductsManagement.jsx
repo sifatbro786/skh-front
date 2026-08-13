@@ -23,15 +23,7 @@ import { metaApi, META_FALLBACK } from "../../services/metaApi";
 import AdminPageHeader from "../../components/admin/AdminPageHeader";
 import DataTable, { timeAgo } from "../../components/admin/DataTable";
 import ConfirmDialog from "../../components/admin/ConfirmDialog";
-import {
-    Button,
-    Field,
-    Modal,
-    Pagination,
-    Select,
-    TextArea,
-    TextInput,
-} from "../../components/ui";
+import { Button, Field, Modal, Pagination, Select, TextArea, TextInput } from "../../components/ui";
 
 const BLANK = {
     title: "",
@@ -53,7 +45,7 @@ function Toggle({ id, checked, onChange, label }) {
                 type="checkbox"
                 checked={checked}
                 onChange={(e) => onChange(e.target.checked)}
-                className="h-4 w-4 accent-[#C5A059]"
+                className="h-4 w-4 accent-brand-gold"
             />
             <span className="text-[13px] text-content">{label}</span>
         </label>
@@ -301,9 +293,7 @@ export default function ProductsManagement() {
                     {
                         key: "moq",
                         header: "MOQ",
-                        render: (r) => (
-                            <span className="text-content-muted">{r.moq || "—"}</span>
-                        ),
+                        render: (r) => <span className="text-content-muted">{r.moq || "—"}</span>,
                     },
                     {
                         key: "isFeatured",
@@ -408,7 +398,11 @@ export default function ProductsManagement() {
                         />
                     </Field>
 
-                    <Field label="Code" htmlFor="p-code" hint="Leave blank to auto-assign SKH-000NN">
+                    <Field
+                        label="Code"
+                        htmlFor="p-code"
+                        hint="Leave blank to auto-assign SKH-000NN"
+                    >
                         <TextInput
                             id="p-code"
                             value={form.code}
@@ -506,9 +500,7 @@ export default function ProductsManagement() {
 
                     {existingImages.length ? (
                         <div className="sm:col-span-2">
-                            <p className="text-[13px] font-semibold text-content">
-                                Current images
-                            </p>
+                            <p className="text-[13px] font-semibold text-content">Current images</p>
                             <div className="mt-3 flex flex-wrap gap-3">
                                 {existingImages.map((path) => (
                                     <label
@@ -537,7 +529,7 @@ export default function ProductsManagement() {
                                                         : list.filter((p) => p !== path),
                                                 )
                                             }
-                                            className="absolute top-1 right-1 h-3.5 w-3.5 accent-[#C5A059]"
+                                            className="absolute top-1 right-1 h-3.5 w-3.5 accent-brand-gold"
                                             aria-label="Remove this image"
                                         />
                                     </label>

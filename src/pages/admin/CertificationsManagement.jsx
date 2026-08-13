@@ -252,7 +252,10 @@ export default function CertificationsManagement() {
                         header: "PDF",
                         render: (r) =>
                             r.pdfPath ? (
-                                <FileText className="h-4 w-4 text-brand-gold" aria-label="Has PDF" />
+                                <FileText
+                                    className="h-4 w-4 text-brand-gold"
+                                    aria-label="Has PDF"
+                                />
                             ) : (
                                 <span className="text-content-subtle">—</span>
                             ),
@@ -408,7 +411,7 @@ export default function CertificationsManagement() {
                                             type="checkbox"
                                             checked={removePdf}
                                             onChange={(e) => setRemovePdf(e.target.checked)}
-                                            className="h-4 w-4 accent-[#C5A059]"
+                                            className="h-4 w-4 accent-brand-gold"
                                         />
                                         <span className="text-[13px] text-content">
                                             Remove current PDF
@@ -428,7 +431,7 @@ export default function CertificationsManagement() {
                             type="checkbox"
                             checked={form.isActive}
                             onChange={(e) => set("isActive")(e.target.checked)}
-                            className="h-4 w-4 accent-[#C5A059]"
+                            className="h-4 w-4 accent-brand-gold"
                         />
                         <span className="text-[13px] text-content">Active (visible publicly)</span>
                     </label>

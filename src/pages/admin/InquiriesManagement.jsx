@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 // src/pages/admin/InquiriesManagement.jsx
 // The RFQ inbox. Filters map 1:1 onto buildInquiryFilter() in the backend
 // (status, buyerType, country, from, to, hasTechPack, search) — anything not in
@@ -23,15 +24,7 @@ import { metaApi, META_FALLBACK } from "../../services/metaApi";
 import AdminPageHeader from "../../components/admin/AdminPageHeader";
 import DataTable, { timeAgo } from "../../components/admin/DataTable";
 import ConfirmDialog from "../../components/admin/ConfirmDialog";
-import {
-    Button,
-    Field,
-    Modal,
-    Pagination,
-    Select,
-    TextArea,
-    TextInput,
-} from "../../components/ui";
+import { Button, Field, Modal, Pagination, Select, TextArea, TextInput } from "../../components/ui";
 
 export default function InquiriesManagement() {
     const { user } = useAuth();
@@ -225,7 +218,7 @@ export default function InquiriesManagement() {
                             setHasTechPack(e.target.checked);
                             setPage(1);
                         }}
-                        className="h-4 w-4 accent-[#C5A059]"
+                        className="h-4 w-4 accent-brand-gold"
                     />
                     <span className="text-[13px] text-content">Has tech pack</span>
                 </label>
@@ -262,9 +255,7 @@ export default function InquiriesManagement() {
                         key: "productId",
                         header: "Product",
                         render: (r) => (
-                            <span className="text-content-muted">
-                                {r.productId?.title || "—"}
-                            </span>
+                            <span className="text-content-muted">{r.productId?.title || "—"}</span>
                         ),
                     },
                     {
@@ -285,7 +276,10 @@ export default function InquiriesManagement() {
                         header: "Tech pack",
                         render: (r) =>
                             r.hasTechPack ? (
-                                <Paperclip className="h-4 w-4 text-brand-gold" aria-label="Has tech pack" />
+                                <Paperclip
+                                    className="h-4 w-4 text-brand-gold"
+                                    aria-label="Has tech pack"
+                                />
                             ) : (
                                 <span className="text-content-subtle">—</span>
                             ),
@@ -326,7 +320,11 @@ export default function InquiriesManagement() {
                             <span />
                         )}
                         <div className="flex gap-2.5">
-                            <Button variant="ghost" onClick={() => setActive(null)} disabled={saving}>
+                            <Button
+                                variant="ghost"
+                                onClick={() => setActive(null)}
+                                disabled={saving}
+                            >
                                 Close
                             </Button>
                             <Button onClick={saveStatus} loading={saving}>
@@ -354,7 +352,7 @@ export default function InquiriesManagement() {
                                     <dt className="text-[10px] font-bold tracking-[0.18em] text-content-subtle uppercase">
                                         {label}
                                     </dt>
-                                    <dd className="text-[13.5px] break-words text-content">
+                                    <dd className="text-[13.5px] wrap-break-word text-content">
                                         {value || "—"}
                                     </dd>
                                 </div>

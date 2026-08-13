@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // src/components/admin/DataTable.jsx
 // The one table shell every admin list screen uses. There was no `Table`
 // primitive in the tree, so this is it — kept in components/admin rather than

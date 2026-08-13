@@ -71,8 +71,13 @@ export default function PageMetaManagement() {
     const set = (key) => (value) => setForm((f) => ({ ...f, [key]: value }));
 
     const save = async () => {
-        const missing = ["pageName", "metaTitle", "metaDescription", "metaKeywords", "canonicalUrl"]
-            .filter((k) => !String(form[k]).trim());
+        const missing = [
+            "pageName",
+            "metaTitle",
+            "metaDescription",
+            "metaKeywords",
+            "canonicalUrl",
+        ].filter((k) => !String(form[k]).trim());
         if (missing.length) {
             toast.error("All fields except the slug are required by the schema");
             return;
@@ -323,7 +328,7 @@ export default function PageMetaManagement() {
                             type="checkbox"
                             checked={form.isActive}
                             onChange={(e) => set("isActive")(e.target.checked)}
-                            className="h-4 w-4 accent-[#C5A059]"
+                            className="h-4 w-4 accent-brand-gold"
                         />
                         <span className="text-[13px] text-content">Active</span>
                     </label>

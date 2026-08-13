@@ -15,6 +15,7 @@ import { certificationApi } from "../../services/certificationApi";
 import { adminApi } from "../../services/adminApi";
 import AdminPageHeader from "../../components/admin/AdminPageHeader";
 import DataTable, { timeAgo } from "../../components/admin/DataTable";
+import { CategoryBars, StatusDonut } from "../../components/admin/OverviewCharts";
 import { Skeleton } from "../../components/ui";
 
 function StatCard({ icon: Icon, label, value, loading, to }) {
@@ -38,7 +39,10 @@ function StatCard({ icon: Icon, label, value, loading, to }) {
     );
 
     return to ? (
-        <Link to={to} className="rounded-xl focus-visible:ring-2 focus-visible:ring-brand-gold/50 focus-visible:outline-none">
+        <Link
+            to={to}
+            className="rounded-xl focus-visible:ring-2 focus-visible:ring-brand-gold/50 focus-visible:outline-none"
+        >
             {body}
         </Link>
     ) : (
@@ -57,10 +61,9 @@ export default function Overview() {
     const admins = useAsync(() => (isSuper ? adminApi.list() : Promise.resolve(null)), [isSuper]);
 
     const recentInquiries = useAsync(() => inquiryApi.list({ limit: 5 }), []);
-    const recentProducts = useAsync(
-        () => productApi.list({ limit: 5, includeInactive: true }),
-        [],
-    );
+    const recentProducts = useAsync(() => productApi.list({ limit: 5, includeInactive: true }), []);
+    // Active-only counts, straight from the aggregate endpoint.
+    const categories = useAsync(() => productApi.categories(), []);
 
     const statusCounts = inquiries.data?.statusCounts || {};
 
@@ -102,9 +105,17 @@ export default function Overview() {
             </div>
 
             {/* Status chips come free with the inquiry list — no extra round-trip. */}
+            <div className="grid gap-6 xl:grid-cols-2">
+                <StatusDonut statusCounts={statusCounts} loading={inquiries.loading} />
+                <CategoryBars
+                    categories={categories.data?.categories || []}
+                    loading={categories.loading}
+                />
+            </div>
+
             <div>
                 <h2 className="font-heading text-[13px] font-bold tracking-[0.18em] text-content-subtle uppercase">
-                    Inquiries by status
+                    Jump to a status
                 </h2>
                 <div className="mt-4 flex flex-wrap gap-2.5">
                     {Object.entries(statusCounts).map(([status, count]) => (

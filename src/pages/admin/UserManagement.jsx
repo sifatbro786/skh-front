@@ -11,6 +11,15 @@
 // screen doesn't pretend to offer one — an admin changes their own password on
 // the Account screen (/auth/change-password), which rotates their token.
 //
+// !! FIELD NAME GOTCHA — the cause of the "super_admin can't change roles" bug.
+// authController's sanitizeAdmin() returns `id`, NOT `_id`:
+//     { id: admin._id, name, email, role, isActive, createdAt }
+// Every OTHER collection is served via .lean() and does carry `_id`, so this
+// screen is the one exception. With `_id`, both `r._id` and `user?._id` were
+// undefined, so `isSelf` evaluated `undefined === undefined` → TRUE on every
+// row: every Role select rendered disabled and every Delete button was hidden.
+// Use `id` here, and pass keyField="id" to DataTable (its default is `_id`).
+//
 // Every self-protection rule is ALSO enforced server-side (self-demote,
 // self-deactivate, self-delete, last super_admin). The UI disables those
 // controls so the user never has to discover the rule via a 400, but the
@@ -70,9 +79,9 @@ export default function UserManagement() {
     };
 
     const changeRole = async (admin, role) => {
-        setRowBusy(admin._id);
+        setRowBusy(admin.id);
         try {
-            await adminApi.updateRole(admin._id, role);
+            await adminApi.updateRole(admin.id, role);
             toast.success(`${admin.name} is now ${ROLE_LABELS[role]}`);
             retry();
         } catch (err) {
@@ -83,9 +92,9 @@ export default function UserManagement() {
     };
 
     const toggleStatus = async (admin) => {
-        setRowBusy(admin._id);
+        setRowBusy(admin.id);
         try {
-            const res = await adminApi.toggleStatus(admin._id);
+            const res = await adminApi.toggleStatus(admin.id);
             toast.success(res.message || "Status updated");
             retry();
         } catch (err) {
@@ -98,7 +107,7 @@ export default function UserManagement() {
     const confirmDelete = async () => {
         setBusy(true);
         try {
-            await adminApi.remove(deleting._id);
+            await adminApi.remove(deleting.id);
             toast.success("Admin deleted");
             setDeleting(null);
             retry();
@@ -127,6 +136,7 @@ export default function UserManagement() {
             <DataTable
                 loading={loading}
                 rows={rows}
+                keyField="id"
                 emptyIcon={UserCog}
                 emptyTitle="No admin accounts"
                 emptyDescription="Create the first console account."
@@ -137,7 +147,7 @@ export default function UserManagement() {
                         render: (r) => (
                             <span className="font-semibold">
                                 {r.name}
-                                {r._id === user?._id ? (
+                                {r.id === user?.id ? (
                                     <span className="ml-2 rounded-full bg-brand-gold/15 px-2 py-0.5 text-[10px] font-bold tracking-wider text-brand-gold uppercase">
                                         You
                                     </span>
@@ -155,7 +165,7 @@ export default function UserManagement() {
                         header: "Role",
                         render: (r) => {
                             // Can't demote yourself, and can't demote the last super_admin.
-                            const isSelf = r._id === user?._id;
+                            const isSelf = r.id === user?.id;
                             const lastSuper = r.role === "super_admin" && superCount <= 1;
                             return (
                                 <Select
@@ -163,9 +173,9 @@ export default function UserManagement() {
                                     onChange={(e) => changeRole(r, e.target.value)}
                                     options={ROLE_OPTIONS}
                                     placeholder=""
-                                    disabled={isSelf || lastSuper || rowBusy === r._id}
+                                    disabled={isSelf || lastSuper || rowBusy === r.id}
                                     aria-label={`Role for ${r.name}`}
-                                    className="max-w-[10rem]"
+                                    className="max-w-40"
                                 />
                             );
                         },
@@ -174,11 +184,11 @@ export default function UserManagement() {
                         key: "isActive",
                         header: "Status",
                         render: (r) => {
-                            const isSelf = r._id === user?._id;
+                            const isSelf = r.id === user?.id;
                             return (
                                 <button
                                     type="button"
-                                    disabled={isSelf || rowBusy === r._id}
+                                    disabled={isSelf || rowBusy === r.id}
                                     onClick={() => toggleStatus(r)}
                                     className={`rounded-full px-2.5 py-1 text-[11px] font-semibold transition-opacity disabled:cursor-not-allowed disabled:opacity-60 ${
                                         r.isActive !== false
@@ -204,7 +214,7 @@ export default function UserManagement() {
                         key: "actions",
                         header: "",
                         render: (r) => {
-                            const isSelf = r._id === user?._id;
+                            const isSelf = r.id === user?.id;
                             const lastSuper = r.role === "super_admin" && superCount <= 1;
                             if (isSelf || lastSuper) return null;
                             return (
@@ -236,7 +246,11 @@ export default function UserManagement() {
                 dismissible={!saving}
                 footer={
                     <div className="flex justify-end gap-2.5">
-                        <Button variant="ghost" onClick={() => setCreating(false)} disabled={saving}>
+                        <Button
+                            variant="ghost"
+                            onClick={() => setCreating(false)}
+                            disabled={saving}
+                        >
                             Cancel
                         </Button>
                         <Button onClick={create} loading={saving}>
