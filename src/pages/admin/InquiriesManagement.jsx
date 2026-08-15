@@ -9,12 +9,11 @@
 // techPackFile from every response and replaces it with a boolean, so the file
 // is only ever reachable through the authenticated /:id/techpack download.
 //
-// `source` is how a Contact-page submission is told apart from an RFQ-modal /
-// product-page submission — both write to the same Inquiry collection, so
-// this is the only signal. Backend sets it: "contact" (Contact page),
-// "product-rfq" (RFQ opened from a product, productId is always set),
-// "rfq" (RFQ opened anywhere else), falling back to "website" for anything
-// submitted before this field existed.
+// `source` distinguishes RFQ origin. Backend sets it: "product-rfq" (RFQ opened
+// from a product, productId is always set) or "rfq" (RFQ opened anywhere else).
+// "contact" and "website" are LEGACY values only — the contact form is now
+// email-only (POST /api/contact) and no longer writes to this collection, so no
+// new rows carry those sources. The filter keeps them so old rows stay findable.
 //
 // The export deliberately reuses the SAME params object as the list so "Export
 // Excel" always matches what's on screen; inquiryApi.exportExcel drops page and
@@ -43,10 +42,8 @@ const SOURCE_LABEL = {
 // Options for the filter <Select>. Kept local rather than round-tripping
 // through /api/meta — it's a fixed, tiny, backend-defined enum.
 const SOURCE_OPTIONS = [
-    { value: "contact", label: "Contact form" },
     { value: "rfq", label: "Quote request" },
     { value: "product-rfq", label: "Product quote" },
-    { value: "website", label: "Website (legacy)" },
 ];
 
 // Small visual distinction so the two most common sources read at a glance
@@ -165,7 +162,7 @@ export default function InquiriesManagement() {
     return (
         <div className="space-y-6">
             <AdminPageHeader
-                description="Quote requests from the RFQ modal and the contact form. Filters apply to the Excel export too."
+                description="Quote requests from the RFQ modal and product pages. Contact-form messages are email-only and don't appear here. Filters apply to the Excel export too."
                 meta={[{ label: "Total", value: data?.total ?? "—" }]}
                 actions={
                     <Button

@@ -287,7 +287,6 @@ export default function RfqModal({ open, context, onClose }) {
                 ...values,
                 productId,
                 techPackFile: file,
-                source: "rfq",
                 website,
             });
             submittedRef.current = true;

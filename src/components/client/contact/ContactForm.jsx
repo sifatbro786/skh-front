@@ -1,19 +1,17 @@
 // src/components/client/contact/ContactForm.jsx
-/* eslint-disable react-hooks/refs */
-// The contact form IS an RFQ. POST /api/inquiries is the only public write
-// endpoint, so this posts the same payload as RfqModal minus `productId`, and
-// inherits the same three contract rules:
+// The contact form is EMAIL-ONLY. It posts to POST /api/contact, which just
+// sends one notification email to the SKH inbox — no Mongo row, no dashboard
+// entry (that's the RFQ flow, RfqModal -> POST /api/inquiries). Contract rules:
 //
 //   1. `website` is the honeypot — PRESENT and EMPTY. A filled value gets a fake
-//      201 from the backend, so we render success either way and never tell a
+//      200 from the backend, so we render success either way and never tell a
 //      bot it was caught.
-//   2. `buyerType` is an enum with no empty member and `pickFields` keeps "",
-//      so it is hard-coded to "Other" here. Never send "".
-//   3. The endpoint is rate-limited to 8/hr per IP. A 429 is a normal outcome,
-//      not an exception — it gets its own panel with a mailto escape hatch.
+//   2. The endpoint is rate-limited to 10/hr per IP. A 429 is a normal outcome,
+//      not an exception — and because there's no persisted record here, ANY
+//      failure surfaces a mailto escape hatch so the message isn't lost.
 //
-// Field maxlengths mirror the Inquiry schema so the ceiling is hit in the UI
-// rather than in a 400.
+// Field maxlengths mirror the backend clip() ceilings so the limit is hit in
+// the UI rather than in a 400.
 import { useEffect, useRef, useState } from "react";
 import {
     CheckCircle2,
@@ -26,7 +24,7 @@ import {
 } from "lucide-react";
 import { Field, TextArea, TextInput } from "../../ui/FormField";
 import Button from "../../ui/Button";
-import { inquiryApi, inquiryErrorMessage } from "../../../services/inquiryApi";
+import { contactApi, contactErrorMessage } from "../../../services/contactApi";
 import { TARGET_MARKETS } from "../../../data/siteContent";
 import { openRfq } from "../../../lib/rfqBus";
 
@@ -71,7 +69,6 @@ export default function ContactForm({ inquiryEmail = "inquiry@skhsourcing.com", 
     const [result, setResult] = useState(null);
 
     const cardRef = useRef(null);
-    const sentToRef = useRef(""); // the email at submit time, so the success copy can't drift
     const rateLimited = failure?.status === 429;
 
     // The form is tall on mobile; on success the panel that replaces it can land
@@ -103,16 +100,10 @@ export default function ContactForm({ inquiryEmail = "inquiry@skhsourcing.com", 
         setSubmitting(true);
         setFailure(null);
         try {
-            const data = await inquiryApi.submit({
-                ...values,
-                buyerType: "Other", 
-                source: "contact",
-                website,
-            });
-            sentToRef.current = values.email;
+            const data = await contactApi.submit({ ...values, website });
             setResult(data);
         } catch (err) {
-            setFailure({ status: err?.response?.status, message: inquiryErrorMessage(err) });
+            setFailure({ status: err?.response?.status, message: contactErrorMessage(err) });
         } finally {
             setSubmitting(false);
         }
@@ -143,18 +134,6 @@ export default function ContactForm({ inquiryEmail = "inquiry@skhsourcing.com", 
                 <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-content-muted">
                     {result.message ||
                         "Thanks — a merchandiser picks this up and replies within one business day, Dhaka time."}
-                </p>
-
-                {result.inquiryId ? (
-                    <p className="mt-5 inline-flex items-center gap-2 rounded-lg bg-surface-inset px-3.5 py-2 font-mono text-[12px] tracking-wider text-content-muted">
-                        REF · {String(result.inquiryId).slice(-8).toUpperCase()}
-                    </p>
-                ) : null}
-
-                <p className="mt-5 text-[13px] text-content-subtle">
-                    A copy is on its way to{" "}
-                    <span className="font-medium text-content">{sentToRef.current}</span>. Check
-                    spam if it hasn&rsquo;t landed in ten minutes.
                 </p>
 
                 <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
@@ -332,25 +311,29 @@ export default function ContactForm({ inquiryEmail = "inquiry@skhsourcing.com", 
                             </p>
                             {/* Backend copy is user-safe — surfaced verbatim. */}
                             <p className="mt-0.5 text-content-muted">{failure.message}</p>
-                            {rateLimited ? (
+                            {/* Contact is email-only: nothing is persisted, so ANY
+                                failure offers the mailto escape hatch so the message
+                                isn't lost. "Try again" is offered for non-429s. */}
+                            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
                                 <a
                                     href={`mailto:${inquiryEmail}?subject=${encodeURIComponent(
                                         `Enquiry — ${values.companyName || values.buyerName}`,
                                     )}&body=${encodeURIComponent(values.message)}`}
-                                    className="mt-2 inline-flex items-center gap-1.5 font-semibold text-brand-gold underline-offset-4 hover:underline"
+                                    className="inline-flex items-center gap-1.5 font-semibold text-brand-gold underline-offset-4 hover:underline"
                                 >
                                     <Mail className="h-3.5 w-3.5" aria-hidden="true" />
                                     Email {inquiryEmail} instead
                                 </a>
-                            ) : (
-                                <button
-                                    type="button"
-                                    onClick={() => setFailure(null)}
-                                    className="mt-2 font-semibold text-brand-gold underline-offset-4 hover:underline"
-                                >
-                                    Try again
-                                </button>
-                            )}
+                                {!rateLimited ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => setFailure(null)}
+                                        className="font-semibold text-brand-gold underline-offset-4 hover:underline"
+                                    >
+                                        Try again
+                                    </button>
+                                ) : null}
+                            </div>
                         </div>
                     </div>
                 ) : null}
