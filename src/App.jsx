@@ -22,6 +22,8 @@ import CompliancePage from "./pages/client/CompliancePage";
 import AboutPage from "./pages/client/AboutPage";
 import ContactPage from "./pages/client/ContactPage";
 import AdminNotFound from "./pages/admin/AdminNotFound";
+import PrivacyPage from "./pages/client/PrivacyPage";
+import TermsPage from "./pages/client/TermsPage";
 
 export default function App() {
     return (
@@ -33,6 +35,8 @@ export default function App() {
                 <Route path="/compliance" element={<CompliancePage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/terms" element={<TermsPage />} />
             </Route>
 
             {/* Auth */}
