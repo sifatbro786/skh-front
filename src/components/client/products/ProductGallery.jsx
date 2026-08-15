@@ -5,14 +5,12 @@
 // The lightbox reuses the Task 1 Modal, so focus trap, scroll lock, ESC and the
 // mobile sheet behaviour all come for free; this only adds arrow keys and swipe.
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Expand, Shirt } from "lucide-react";
+import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
 import Modal from "../../ui/Modal";
-import { assetUrl } from "../../../services/api";
 
 const SWIPE_THRESHOLD = 48; // px — below this it's a tap, not a swipe
 
-export default function ProductGallery({ images = [], title = "" }) {
-    const urls = images.map(assetUrl).filter(Boolean);
+export default function ProductGallery({ urls = [], isStock = false, title = "" }) {
     const [index, setIndex] = useState(0);
     const [zoomOpen, setZoomOpen] = useState(false);
     const touchStart = useRef(null);
@@ -46,18 +44,9 @@ export default function ProductGallery({ images = [], title = "" }) {
         if (Math.abs(delta) > SWIPE_THRESHOLD) step(delta < 0 ? 1 : -1);
     };
 
-    if (!urls.length) {
-        return (
-            <div className="grid aspect-4/5 w-full place-items-center rounded-2xl border border-border-subtle bg-surface-inset">
-                <div className="text-center">
-                    <Shirt className="mx-auto h-10 w-10 text-border-strong" aria-hidden="true" />
-                    <p className="mt-3 text-[12px] font-semibold tracking-[0.16em] text-content-subtle uppercase">
-                        Photography pending
-                    </p>
-                </div>
-            </div>
-        );
-    }
+    // resolveProductImages() always returns at least one frame, so there is no
+    // empty state left to render here.
+    if (!urls.length) return null;
 
     return (
         <div>
@@ -83,6 +72,12 @@ export default function ProductGallery({ images = [], title = "" }) {
                 >
                     <Expand className="h-4 w-4" aria-hidden="true" />
                 </button>
+
+                {isStock ? (
+                    <span className="absolute bottom-3 left-3 rounded-md bg-brand-dark/75 px-2.5 py-1.5 text-[10px] font-semibold tracking-[0.14em] text-white/80 uppercase backdrop-blur-sm">
+                        Stock image — photography pending
+                    </span>
+                ) : null}
 
                 {urls.length > 1 ? (
                     <>

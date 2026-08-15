@@ -8,9 +8,6 @@ import {
     ShieldCheck,
     Leaf,
     Ship,
-    Search,
-    FileCheck2,
-    PackageCheck,
     Handshake,
 } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
@@ -78,25 +75,21 @@ export const SERVICES = [
 export const PROCESS = [
     {
         step: "01",
-        icon: Search,
         title: "Inquiry & Costing",
         body: "Share a tech pack or reference. We return factory options, indicative pricing and lead times within one business day.",
     },
     {
         step: "02",
-        icon: FileCheck2,
         title: "Sampling & Approval",
         body: "Proto, fit and PP samples with fabric and trim cards, revised until the buyer signs off on the golden sample.",
     },
     {
         step: "03",
-        icon: Factory,
         title: "Bulk Production",
         body: "Booked capacity, TNA-tracked milestones and inline QC, with weekly WIP reports from cut to finish.",
     },
     {
         step: "04",
-        icon: PackageCheck,
         title: "Inspection & Shipment",
         body: "Final AQL inspection, carton audit and documentation, then handover to your nominated forwarder.",
     },

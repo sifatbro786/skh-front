@@ -30,7 +30,7 @@ export default function RelatedProducts({ category, excludeId }) {
                         <p className="text-[11px] font-bold tracking-[0.24em] text-brand-gold uppercase">
                             More in this category
                         </p>
-                        <h2 className="selvedge mt-3 font-heading text-2xl font-extrabold tracking-[-0.02em] text-content sm:text-3xl">
+                        <h2 className="mt-3 font-heading text-2xl font-extrabold tracking-[-0.02em] text-content sm:text-3xl">
                             {category}
                         </h2>
                     </div>

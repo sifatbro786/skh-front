@@ -49,6 +49,9 @@ const LATTICE = {
 
 const SHOWCASE_FALLBACK = [{ name: "Knitwear" }, { name: "Denim & Wovens" }];
 
+/** Rows shown in the range index — keeps the hero to roughly one screen. */
+const RANGE_ROWS = 5;
+
 /** Skips indices already known to 404, so a dead photo can't stall the rotation. */
 const advance = (current, broken) => {
     for (let step = 1; step <= SLIDES.length; step++) {
@@ -104,7 +107,7 @@ function RangeIndex({ rows, loading, showCounts }) {
 
             {loading && !rows.length ? (
                 <ul className="mt-1">
-                    {Array.from({ length: 6 }).map((_, i) => (
+                    {Array.from({ length: RANGE_ROWS }).map((_, i) => (
                         <li
                             key={i}
                             className="flex items-center gap-4 border-b border-white/5 py-3"
@@ -183,20 +186,6 @@ function CategoryShowcase({ rows }) {
                     {front?.name}
                 </span>
             </div>
-
-            {/* The "floating" status pill — pinned to the corner of the stack. */}
-            <div
-                className="absolute -top-4 -left-2 z-20 flex items-center gap-2 rounded-full border border-white/15 bg-brand-dark/85 py-1.5 pr-3.5 pl-2 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)] backdrop-blur-md"
-                role="status"
-            >
-                <span className="relative flex h-1.5 w-1.5 shrink-0" aria-hidden="true">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70 motion-reduce:hidden" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                </span>
-                <span className="text-[9px] font-bold tracking-[0.14em] text-content-inverse uppercase">
-                    Dhaka &amp; Sydney Hubs
-                </span>
-            </div>
         </div>
     );
 }
@@ -209,7 +198,10 @@ export default function HeroSection() {
     const { data, loading } = useAsync(() => productApi.categories(), []);
     const all = data?.categories || [];
     const stocked = all.filter((c) => c.count > 0);
-    const rows = stocked.length ? stocked : all;
+    // Capped at four: the index is a taste of the range, not the range itself,
+    // and every extra row pushes the hero taller than one screen. "Full catalog"
+    // at the foot of the panel is the way to the rest.
+    const rows = (stocked.length ? stocked : all).slice(0, RANGE_ROWS);
     const showCounts = stocked.length > 0;
 
     useEffect(() => {

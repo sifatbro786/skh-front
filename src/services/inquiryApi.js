@@ -12,6 +12,7 @@ const RFQ_FIELDS = [
     "targetQuantity",
     "message",
     "productId",
+    "source",
 ];
 
 /**

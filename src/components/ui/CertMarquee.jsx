@@ -10,12 +10,16 @@
 //     viewport and the loop showed a visible gap. The list is now repeated up to
 //     MIN_TRACK entries *before* the -50% duplicate.
 import { assetUrl } from "../../services/api";
+import { isPlaceholderAsset } from "../../lib/placeholders";
 import { COMPLIANCE_STANDARDS } from "../../data/siteContent";
 
 const MIN_TRACK = 8;
 
 const Item = ({ item, tone, hidden }) => {
-    const logo = assetUrl(item.logoPath);
+    // A seeded placeholder plate is a navy box with the title already printed in
+    // it — rendering it beside the wordmark reads as a broken logo twice over.
+    // Until real artwork is uploaded the wordmark alone is the cleaner mark.
+    const logo = isPlaceholderAsset(item.logoPath) ? null : assetUrl(item.logoPath);
     return (
         <li className="flex shrink-0 items-center gap-3 px-8" aria-hidden={hidden || undefined}>
             {logo ? (

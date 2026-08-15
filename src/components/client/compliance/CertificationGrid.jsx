@@ -12,6 +12,7 @@
 // collection hasn't been seeded yet.
 import { ArrowDownToLine, RotateCw } from "lucide-react";
 import { certLogoUrl, certPdfUrl } from "../../../services/certificationApi";
+import { isPlaceholderAsset } from "../../../lib/placeholders";
 import Skeleton from "../../ui/Skeleton";
 import Button from "../../ui/Button";
 
@@ -32,7 +33,9 @@ const monogram = (title = "") => {
 };
 
 function CertificationCard({ cert, muted }) {
-    const logo = muted ? null : certLogoUrl(cert);
+    // A seeded placeholder plate is a navy box with the title printed inside it;
+    // the monogram fallback below is a cleaner mark until real artwork lands.
+    const logo = muted || isPlaceholderAsset(cert.logoPath) ? null : certLogoUrl(cert);
     // Only certificates SKH actually holds expose a download. Partner-scope rows
     // are standards our audited mills are certified against — we never host a
     // downloadable third-party certificate for them, even if a pdfPath exists.

@@ -105,8 +105,9 @@ export default function ContactForm({ inquiryEmail = "inquiry@skhsourcing.com", 
         try {
             const data = await inquiryApi.submit({
                 ...values,
-                buyerType: "Other", // enum has no empty member — see header note
-                website, // stays "" for humans
+                buyerType: "Other", 
+                source: "contact",
+                website,
             });
             sentToRef.current = values.email;
             setResult(data);

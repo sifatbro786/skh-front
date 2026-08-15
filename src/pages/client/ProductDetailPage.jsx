@@ -5,29 +5,33 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import {
-    ArrowLeft,
-    ArrowRight,
-    Check,
-    Link2,
-    Mail,
-    PackageSearch,
-    ShieldCheck,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Link2, Mail, PackageSearch } from "lucide-react";
 import { useAsync } from "../../hooks/useAsync";
 import { productApi } from "../../services/productApi";
 import { SITE } from "../../data/siteContent";
 import { openRfqForProduct } from "../../lib/rfqBus";
+import { resolveProductImages } from "../../lib/productImages";
 import ProductGallery from "../../components/client/products/ProductGallery";
 import RelatedProducts from "../../components/client/products/RelatedProducts";
 import Button from "../../components/ui/Button";
 import EmptyState from "../../components/ui/EmptyState";
 import { Skeleton, SkeletonText } from "../../components/ui/Skeleton";
 
+// Deliberately not three parallel one-liners with three identical icons — each
+// answers a different buyer question, so each gets its own label and voice.
 const ASSURANCES = [
-    "Inline and final AQL inspection by our own QC team",
-    "Fabric, wash and trims open to your specification",
-    "Indicative costing back within one business day",
+    {
+        label: "Quality",
+        body: "Inline and final AQL inspection by our own QC team — never a self-certified factory report.",
+    },
+    {
+        label: "Open spec",
+        body: "Fabric, wash, trims and packaging are yours to change. This listing is a starting point.",
+    },
+    {
+        label: "Costing",
+        body: "Send the quantity and delivery window; indicative FOB comes back within one business day.",
+    },
 ];
 
 function SpecRow({ label, value, mono = false }) {
@@ -134,6 +138,8 @@ export default function ProductDetailPage() {
         );
     }
 
+    const gallery = resolveProductImages(product);
+
     const paragraphs = (product.description || "")
         .split(/\n{2,}/)
         .map((p) => p.trim())
@@ -197,7 +203,11 @@ export default function ProductDetailPage() {
                         {/* Sticky on desktop so the gallery stays with the spec as
                             the buyer reads down a long description. */}
                         <div className="lg:sticky lg:top-24 lg:self-start">
-                            <ProductGallery images={product.images} title={product.title} />
+                            <ProductGallery
+                                urls={gallery.urls}
+                                isStock={gallery.isStock}
+                                title={product.title}
+                            />
                         </div>
 
                         <div>
@@ -251,16 +261,19 @@ export default function ProductDetailPage() {
                                 </Button>
                             </div>
 
-                            <ul className="mt-7 space-y-2.5">
-                                {ASSURANCES.map((line) => (
-                                    <li key={line} className="flex gap-2.5">
-                                        <ShieldCheck
-                                            className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold"
+                            <ul className="mt-8 space-y-4 pl-5">
+                                {ASSURANCES.map((item) => (
+                                    <li key={item.label} className="relative">
+                                        <span
+                                            className="absolute top-1.5 -left-5.25 h-1.5 w-1.5 bg-brand-gold"
                                             aria-hidden="true"
                                         />
-                                        <span className="text-[13.5px] leading-relaxed text-content-muted">
-                                            {line}
-                                        </span>
+                                        <p className="text-[10px] font-bold tracking-[0.2em] text-brand-gold uppercase">
+                                            {item.label}
+                                        </p>
+                                        <p className="mt-1 text-[13.5px] leading-relaxed text-content-muted">
+                                            {item.body}
+                                        </p>
                                     </li>
                                 ))}
                             </ul>

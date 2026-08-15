@@ -5,13 +5,33 @@
 // information the buyer needs. The rail itself is the selvedge device scaled up
 // — a hairline with a gold node per step, running horizontally on desktop and
 // vertically (as a true selvedge edge) on mobile.
+//
+// The oversized step figure does the work the old uniform columns didn't: it
+// gives the eye a rhythm to travel along, so four equal blocks stop reading as
+// four equal blocks.
 import { PROCESS } from "../../../data/siteContent";
 import SectionHeading from "../../ui/SectionHeading";
+import Photo from "../../ui/Photo";
+import { STOCK_PHOTOS } from "../../../data/stockPhotos";
+
+const LATTICE = {
+    backgroundImage:
+        "repeating-linear-gradient(90deg, rgba(197,160,89,0.10) 0 1px, transparent 1px 76px)," +
+        "repeating-linear-gradient(0deg, rgba(197,160,89,0.07) 0 1px, transparent 1px 76px)",
+};
 
 export default function ProcessRail() {
     return (
-        <section className="bg-surface-dark py-20 sm:py-24">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="relative overflow-hidden bg-surface-dark py-20 sm:py-24">
+            {/* Photographic ground, pushed well back — the band was flat navy and
+                sat between two light sections with nothing to hold the eye. */}
+            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+                <Photo src={STOCK_PHOTOS.qualityDetail} className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-linear-to-r from-brand-dark via-brand-dark/96 to-brand-dark/88" />
+                <div className="absolute inset-0 opacity-[0.06]" style={LATTICE} />
+            </div>
+
+            <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <SectionHeading
                     tone="dark"
                     eyebrow="How an order runs"
@@ -19,25 +39,17 @@ export default function ProcessRail() {
                     subtitle="Your merchandiser stays the same from the first costing to the final carton audit — there is no handoff between departments to chase."
                 />
 
-                <ol className="mt-14 grid gap-10 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-4">
-                    {PROCESS.map(({ step, icon: Icon, title, body }) => (
+                <ol className="mt-8 grid gap-10 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-4">
+                    {PROCESS.map(({ step, title, body }) => (
                         <li
                             key={step}
-                            className="relative border-l border-white/12 pt-0 pl-6 lg:border-l-0 lg:border-t lg:pt-7 lg:pl-0"
+                            className="group relative pt-0 pl-6 transition-colors duration-300 lg:pt-7 lg:pl-0"
                         >
-                            {/* Node sits on the rail: centred on the left border below
-                                lg, on the top border from lg up. */}
-                            <span
-                                className="absolute top-0 left-0 h-2 w-2 -translate-x-1/2 rotate-45 bg-brand-gold lg:top-0 lg:translate-x-0 lg:-translate-y-1/2"
-                                aria-hidden="true"
-                            />
-
-                            <div className="flex items-center gap-3">
-                                <span className="font-mono text-[12px] font-bold tracking-[0.2em] text-brand-gold tabular-nums">
+                            <div className="flex items-baseline gap-3">
+                                <span className="font-heading text-3xl leading-none font-extrabold text-white/12 tabular-nums transition-colors duration-300 group-hover:text-brand-gold/35">
                                     {step}
                                 </span>
-                                <span className="h-px w-6 bg-white/15" aria-hidden="true" />
-                                <Icon className="h-4 w-4 text-white/40" aria-hidden="true" />
+                                <span className="h-px flex-1 bg-white/10" aria-hidden="true" />
                             </div>
 
                             <h3 className="mt-4 font-heading text-lg font-bold text-content-inverse">

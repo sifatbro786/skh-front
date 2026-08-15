@@ -37,7 +37,6 @@ export default function Homepage() {
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
 
-            {/* h1 lives in HeroSection — one per document. */}
             <HeroSection />
             <StatsBand />
             <TrustStrip />

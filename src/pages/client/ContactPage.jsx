@@ -5,8 +5,7 @@
 // over OFFICES_FALLBACK, so the cards render instantly and correctly even if the
 // request is slow or the CompanyStats row is half-filled. No clocks here: the
 // Footer already runs them site-wide.
-import { Link } from "react-router-dom";
-import { Mail, Phone } from "lucide-react";
+
 import { usePageMeta } from "../../hooks/usePageMeta";
 import { useOffices } from "../../hooks/useOffices";
 import { SITE } from "../../data/siteContent";
@@ -33,61 +32,13 @@ const NEXT_STEPS = [
     },
 ];
 
-/** Header aside: the two addresses buyers actually use, as tap targets. */
-function DirectLines({ primaryEmail, inquiryEmail, bdPhone }) {
-    const rows = [
-        {
-            label: "Sourcing enquiries",
-            value: inquiryEmail,
-            href: `mailto:${inquiryEmail}`,
-            icon: Mail,
-        },
-        { label: "Director", value: primaryEmail, href: `mailto:${primaryEmail}`, icon: Mail },
-        {
-            label: "Dhaka office",
-            value: bdPhone,
-            href: `tel:${String(bdPhone || "").replace(/[^\d+]/g, "")}`,
-            icon: Phone,
-        },
-    ].filter((row) => row.value);
-
-    return (
-        <div className="rounded-xl border border-border-dark bg-white/5 p-5">
-            <h2 className="font-heading text-[10px] font-bold tracking-[0.26em] text-white/45 uppercase">
-                Direct lines
-            </h2>
-            <ul className="mt-4 space-y-3.5">
-                {rows.map(({ label, value, href, icon: Icon }) => (
-                    <li key={label}>
-                        <p className="text-[11px] tracking-[0.14em] text-white/40 uppercase">
-                            {label}
-                        </p>
-                        <a
-                            href={href}
-                            className="mt-1 flex items-center gap-2 text-[13.5px] wrap-break-word text-content-inverse transition-colors hover:text-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50 focus-visible:outline-none"
-                        >
-                            <Icon
-                                className="h-3.5 w-3.5 shrink-0 text-brand-gold"
-                                aria-hidden="true"
-                            />
-                            {value}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-}
-
 export default function ContactPage() {
     const { pageMeta } = usePageMeta("contact");
     const { offices, stats } = useOffices();
 
-    const bd = offices.find((office) => office.id === "bd") || offices[0];
     const au = offices.find((office) => office.id === "au") || offices[1];
     const inquiryEmail =
         stats?.contactDetails?.inquiryEmail || au?.email || "inquiry@skhsourcing.com";
-    const primaryEmail = stats?.contactDetails?.primaryEmail || bd?.email;
 
     const title = pageMeta?.metaTitle || `Contact — ${SITE.name}`;
     const description =
@@ -108,13 +59,6 @@ export default function ContactPage() {
                 title="Talk to a merchandiser"
                 intro="Send the requirement — style, quantity, delivery window — and we'll come back with factory options and costing. No account, no minimum enquiry."
                 image={STOCK_PHOTOS.qualityDetail}
-                aside={
-                    <DirectLines
-                        primaryEmail={primaryEmail}
-                        inquiryEmail={inquiryEmail}
-                        bdPhone={bd?.phone}
-                    />
-                }
             />
 
             <section className="bg-surface py-12 sm:py-16">
@@ -156,11 +100,7 @@ export default function ContactPage() {
                             {/* Numbered because it genuinely is a sequence. */}
                             <ol className="mt-5 space-y-6">
                                 {NEXT_STEPS.map((item) => (
-                                    <li key={item.step} className="relative pl-6">
-                                        <span
-                                            className="absolute top-1.5 left-0 h-1.5 w-1.5 bg-brand-gold"
-                                            aria-hidden="true"
-                                        />
+                                    <li key={item.step} className="relative">
                                         <span className="font-mono text-[11px] tracking-[0.14em] text-brand-gold tabular-nums">
                                             {item.step}
                                         </span>
@@ -173,17 +113,6 @@ export default function ContactPage() {
                                     </li>
                                 ))}
                             </ol>
-
-                            <p className="mt-8 text-[12.5px] leading-relaxed text-content-subtle">
-                                Looking for certificates instead?{" "}
-                                <Link
-                                    to="/compliance"
-                                    className="font-semibold text-brand-gold underline-offset-4 hover:underline"
-                                >
-                                    Open the compliance register
-                                </Link>
-                                .
-                            </p>
                         </aside>
                     </div>
                 </div>

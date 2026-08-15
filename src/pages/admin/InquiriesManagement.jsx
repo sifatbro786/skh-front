@@ -1,13 +1,20 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 // src/pages/admin/InquiriesManagement.jsx
 // The RFQ inbox. Filters map 1:1 onto buildInquiryFilter() in the backend
-// (status, buyerType, country, from, to, hasTechPack, search) — anything not in
-// that list is silently ignored server-side, so nothing is added here that the
-// API can't honour.
+// (status, buyerType, country, from, to, hasTechPack, search, source) —
+// anything not in that list is silently ignored server-side, so nothing is
+// added here that the API can't honour.
 //
 // `hasTechPack` is a presence flag, not a path: sanitizeInquiry() strips
 // techPackFile from every response and replaces it with a boolean, so the file
 // is only ever reachable through the authenticated /:id/techpack download.
+//
+// `source` is how a Contact-page submission is told apart from an RFQ-modal /
+// product-page submission — both write to the same Inquiry collection, so
+// this is the only signal. Backend sets it: "contact" (Contact page),
+// "product-rfq" (RFQ opened from a product, productId is always set),
+// "rfq" (RFQ opened anywhere else), falling back to "website" for anything
+// submitted before this field existed.
 //
 // The export deliberately reuses the SAME params object as the list so "Export
 // Excel" always matches what's on screen; inquiryApi.exportExcel drops page and
@@ -26,6 +33,30 @@ import DataTable, { timeAgo } from "../../components/admin/DataTable";
 import ConfirmDialog from "../../components/admin/ConfirmDialog";
 import { Button, Field, Modal, Pagination, Select, TextArea, TextInput } from "../../components/ui";
 
+const SOURCE_LABEL = {
+    contact: "Contact",
+    rfq: "Quote",
+    "product-rfq": "Product quote",
+    website: "Website",
+};
+
+// Options for the filter <Select>. Kept local rather than round-tripping
+// through /api/meta — it's a fixed, tiny, backend-defined enum.
+const SOURCE_OPTIONS = [
+    { value: "contact", label: "Contact form" },
+    { value: "rfq", label: "Quote request" },
+    { value: "product-rfq", label: "Product quote" },
+    { value: "website", label: "Website (legacy)" },
+];
+
+// Small visual distinction so the two most common sources read at a glance
+// without adding a new color to the design system.
+const SOURCE_BADGE = {
+    contact: "border-border-subtle text-content-muted",
+    rfq: "border-brand-gold/40 text-brand-gold",
+    "product-rfq": "border-brand-gold/40 text-brand-gold",
+};
+
 export default function InquiriesManagement() {
     const { user } = useAuth();
     const isSuper = user?.role === "super_admin";
@@ -34,6 +65,7 @@ export default function InquiriesManagement() {
     // Deep link from the Overview status chips: /admin/inquiries?status=New
     const [status, setStatus] = useState(searchParams.get("status") || "");
     const [buyerType, setBuyerType] = useState("");
+    const [source, setSource] = useState(searchParams.get("source") || "");
     const [country, setCountry] = useState("");
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
@@ -61,13 +93,14 @@ export default function InquiriesManagement() {
             limit: 20,
             status: status || undefined,
             buyerType: buyerType || undefined,
+            source: source || undefined,
             country: debouncedCountry || undefined,
             from: from || undefined,
             to: to || undefined,
             hasTechPack: hasTechPack ? "true" : undefined,
             search: debouncedSearch || undefined,
         }),
-        [page, status, buyerType, debouncedCountry, from, to, hasTechPack, debouncedSearch],
+        [page, status, buyerType, source, debouncedCountry, from, to, hasTechPack, debouncedSearch],
     );
 
     const { data, loading, retry } = useAsync(() => inquiryApi.list(params), [params]);
@@ -174,6 +207,16 @@ export default function InquiriesManagement() {
                     aria-label="Filter by status"
                 />
                 <Select
+                    value={source}
+                    onChange={(e) => {
+                        setSource(e.target.value);
+                        setPage(1);
+                    }}
+                    options={SOURCE_OPTIONS}
+                    placeholder="All sources"
+                    aria-label="Filter by source"
+                />
+                <Select
                     value={buyerType}
                     onChange={(e) => {
                         setBuyerType(e.target.value);
@@ -259,6 +302,20 @@ export default function InquiriesManagement() {
                         ),
                     },
                     {
+                        key: "source",
+                        header: "Source",
+                        render: (r) => (
+                            <span
+                                className={`inline-block rounded-full border px-2.5 py-1 text-[11px] font-semibold whitespace-nowrap ${
+                                    SOURCE_BADGE[r.source] ||
+                                    "border-border-subtle text-content-muted"
+                                }`}
+                            >
+                                {SOURCE_LABEL[r.source] || "Website"}
+                            </span>
+                        ),
+                    },
+                    {
                         key: "status",
                         header: "Status",
                         render: (r) => (
@@ -338,6 +395,7 @@ export default function InquiriesManagement() {
                     <div className="space-y-6">
                         <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
                             {[
+                                ["Source", SOURCE_LABEL[active.source] || "Website"],
                                 ["Email", active.email],
                                 ["Phone", active.phone],
                                 ["Company", active.companyName],

@@ -7,32 +7,31 @@
 // "Request quote" button sits above it on z-10. Nesting a <button> inside an <a>
 // is invalid HTML and breaks keyboard activation in Safari.
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Layers, Shirt } from "lucide-react";
-import { assetUrl } from "../../services/api";
+import { ArrowUpRight, Layers } from "lucide-react";
 import { openRfqForProduct } from "../../lib/rfqBus";
+import { resolveProductImages } from "../../lib/productImages";
 
 export default function ProductCard({ product, priority = false }) {
     if (!product) return null;
 
-    const image = assetUrl(product.images?.[0]);
-    const extraImages = Math.max((product.images?.length || 0) - 1, 0);
+    const { urls, isStock } = resolveProductImages(product);
+    const extraImages = isStock ? 0 : Math.max(urls.length - 1, 0);
 
     return (
         <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface-raised transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-brand-gold/45 hover:shadow-[0_20px_44px_-28px_rgba(15,23,42,0.45)] motion-reduce:hover:translate-y-0">
             <div className="relative aspect-4/5 overflow-hidden bg-surface-inset">
-                {image ? (
-                    <img
-                        src={image}
-                        alt={product.title}
-                        loading={priority ? "eager" : "lazy"}
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
-                    />
-                ) : (
-                    <div className="grid h-full w-full place-items-center bg-[linear-gradient(135deg,#f1f5f9_0%,#e8eaef_100%)]">
-                        <Shirt className="h-9 w-9 text-border-strong" aria-hidden="true" />
-                    </div>
-                )}
+                <img
+                    src={urls[0]}
+                    alt={product.title}
+                    loading={priority ? "eager" : "lazy"}
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
+                />
+                {/* Grounds the frame so pale flat-lays don't float off the card edge. */}
+                <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-brand-dark/25 to-transparent"
+                    aria-hidden="true"
+                />
 
                 {product.isFeatured ? (
                     <span className="absolute top-3 left-3 rounded-full bg-brand-dark/85 px-2.5 py-1 text-[10px] font-bold tracking-[0.18em] text-brand-gold uppercase backdrop-blur-sm">
@@ -40,7 +39,12 @@ export default function ProductCard({ product, priority = false }) {
                     </span>
                 ) : null}
 
-                {extraImages ? (
+                {isStock ? (
+                    // Say it plainly — a buyer must never think this is the style.
+                    <span className="absolute right-3 bottom-3 rounded-md bg-brand-dark/70 px-2 py-1 text-[9px] font-semibold tracking-[0.14em] text-white/75 uppercase backdrop-blur-sm">
+                        Stock image
+                    </span>
+                ) : extraImages ? (
                     <span className="absolute right-3 bottom-3 inline-flex items-center gap-1 rounded-md bg-brand-dark/70 px-2 py-1 text-[10px] font-semibold text-white/90 tabular-nums backdrop-blur-sm">
                         <Layers className="h-3 w-3" aria-hidden="true" />+{extraImages}
                     </span>

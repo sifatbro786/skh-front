@@ -32,7 +32,7 @@ import Button from "../ui/Button";
 import { Field, FileInput, Select, TextArea, TextInput } from "../ui/FormField";
 import { inquiryApi, inquiryErrorMessage } from "../../services/inquiryApi";
 import { META_FALLBACK, humanBytes, metaApi, validateUpload } from "../../services/metaApi";
-import { assetUrl } from "../../services/api";
+import { resolveProductThumb } from "../../lib/productImages";
 
 /* ------------------------------ Form model ------------------------------ */
 
@@ -116,7 +116,9 @@ function StepRail({ current, total, label }) {
 
 function ProductChip({ product, productId }) {
     if (!product && !productId) return null;
-    const thumb = assetUrl(product?.images?.[0]);
+    // Same placeholder-aware resolution as the card the user clicked from, so
+    // the thumbnail here matches what they just saw.
+    const thumb = product ? resolveProductThumb(product).url : null;
 
     return (
         <div className="mb-5 flex items-center gap-3 rounded-xl border border-brand-gold/25 bg-brand-gold/6 p-3">
@@ -285,7 +287,8 @@ export default function RfqModal({ open, context, onClose }) {
                 ...values,
                 productId,
                 techPackFile: file,
-                website, // stays "" for humans
+                source: "rfq",
+                website,
             });
             submittedRef.current = true;
             setResult(data);
