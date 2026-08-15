@@ -28,9 +28,6 @@ export default function App() {
         <Routes>
             <Route element={<ClientLayout />}>
                 <Route path="/" element={<Homepage />} />
-                {/* Static-ish segments must not be shadowed by /products/:id —
-                    React Router ranks the literal path higher, but keep the
-                    order explicit for anyone reading the file. */}
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/products/:id" element={<ProductDetailPage />} />
                 <Route path="/compliance" element={<CompliancePage />} />
@@ -57,8 +54,6 @@ export default function App() {
                 <Route path="inquiries" element={<InquiriesManagement />} />
                 <Route path="certifications" element={<CertificationsManagement />} />
                 <Route path="company" element={<CompanySettings />} />
-                {/* "page-meta", not "pagemeta" — adminNav.js links to
-                    /admin/page-meta, so the old spelling 404'd from the sidebar. */}
                 <Route path="page-meta" element={<PageMetaManagement />} />
                 <Route
                     path="users"
@@ -70,7 +65,6 @@ export default function App() {
                 />
                 <Route path="settings" element={<AccountSettings />} />
 
-                {/* Fallback */}
                 <Route path="*" element={<AdminNotFound />} />
             </Route>
 
