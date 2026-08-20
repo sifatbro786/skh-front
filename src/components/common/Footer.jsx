@@ -130,7 +130,7 @@ export default function Footer() {
                         <img
                             src="/logo.png"
                             alt="SKH Sourcing"
-                            className="h-11 w-auto"
+                            className="h-12 sm:h-18 w-auto"
                             draggable="false"
                         />
                         <p className="mt-5 max-w-xs text-sm leading-relaxed text-content-subtle">
