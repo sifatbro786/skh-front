@@ -1,0 +1,22 @@
+# https://www.skhsourcing.com/robots.txt
+# SKH Sourcing - B2B apparel sourcing & buying house
+
+User-agent: *
+Allow: /
+
+# Admin console and authentication surfaces - never index
+Disallow: /admin
+Disallow: /admin/
+Disallow: /login
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /reset-password/
+
+# Filter / sort permutations of the catalogue are duplicates of /products
+Disallow: /*?*search=
+Disallow: /*?*page=
+Disallow: /*?*sort=
+
+# Product imagery should be crawled - do not block /uploads
+
+Sitemap: https://www.skhsourcing.com/sitemap.xml

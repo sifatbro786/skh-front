@@ -2,9 +2,120 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/logo.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SKH Sourcing</title>
+        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+        <meta name="theme-color" content="#0F172A" />
+
+        <!-- Baseline meta. Per-page values are swapped at runtime by usePageMeta;
+             these are the crawler/scraper fallback for the un-hydrated document. -->
+        <title>SKH Sourcing — Apparel Sourcing &amp; Buying House | Dhaka &amp; Sydney</title>
+        <meta
+            name="description"
+            content="SKH Sourcing is a Bangladesh-based apparel sourcing and buying house serving importers, retailers and brands across Australia, Europe, North America, the Middle East, Asia and Africa. Knitwear, woven, denim, outerwear, sportswear, home textiles and sustainable fabrics with end-to-end quality inspection."
+        />
+        <link rel="canonical" href="https://www.skhsourcing.com/" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+
+        <!-- Open Graph / LinkedIn / WhatsApp -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="SKH Sourcing" />
+        <meta property="og:title" content="SKH Sourcing — Apparel Sourcing &amp; Buying House" />
+        <meta
+            property="og:description"
+            content="Knitwear, woven, denim, outerwear, sportswear and home textiles sourced from compliant Bangladesh factories. Offices in Dhaka and Liverpool, NSW."
+        />
+        <meta property="og:url" content="https://www.skhsourcing.com/" />
+        <meta property="og:image" content="https://www.skhsourcing.com/og-cover.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_US" />
+
+        <!-- Twitter / X -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="SKH Sourcing — Apparel Sourcing &amp; Buying House" />
+        <meta
+            name="twitter:description"
+            content="Compliant apparel sourcing from Bangladesh for importers, retailers and brands worldwide."
+        />
+        <meta name="twitter:image" content="https://www.skhsourcing.com/og-cover.jpg" />
+
+        <!-- Font origins are hit by the CSS @import in index.css; warming them
+             early removes a serial round-trip from the critical path. -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <!-- Organization + both offices. Feeds Google's knowledge panel and the
+             "sameAs / address" surfaces on brand searches. -->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "@id": "https://www.skhsourcing.com/#organization",
+                "name": "SKH Sourcing",
+                "url": "https://www.skhsourcing.com/",
+                "logo": "https://www.skhsourcing.com/logo.png",
+                "description": "Apparel sourcing and buying house supplying knitwear, woven garments, denim, outerwear, sportswear, home textiles and garment accessories to global buyers.",
+                "email": "inquiry@skhsourcing.com",
+                "founder": {
+                    "@type": "Person",
+                    "name": "MD. Abdul Manzur Kazal",
+                    "jobTitle": "Director"
+                },
+                "address": [
+                    {
+                        "@type": "PostalAddress",
+                        "streetAddress": "House 2, 5th Floor, Road 2, Badda Gudaraghat, Gulshan-Badda Link Road, Badda",
+                        "addressLocality": "Dhaka",
+                        "postalCode": "1212",
+                        "addressCountry": "BD"
+                    },
+                    {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Unit 30, Block B, 1 Anderson Avenue",
+                        "addressLocality": "Liverpool",
+                        "addressRegion": "NSW",
+                        "postalCode": "2170",
+                        "addressCountry": "AU"
+                    }
+                ],
+                "contactPoint": [
+                    {
+                        "@type": "ContactPoint",
+                        "telephone": "+880-1842-770200",
+                        "contactType": "sales",
+                        "areaServed": ["BD", "AS"],
+                        "availableLanguage": ["en", "bn"]
+                    },
+                    {
+                        "@type": "ContactPoint",
+                        "telephone": "+61-480-687-273",
+                        "contactType": "sales",
+                        "areaServed": ["AU", "NZ"],
+                        "availableLanguage": ["en"]
+                    }
+                ],
+                "areaServed": [
+                    "Australia",
+                    "Europe",
+                    "North America",
+                    "Middle East",
+                    "Asia",
+                    "Africa"
+                ],
+                "knowsAbout": [
+                    "Knitwear",
+                    "Woven Garments",
+                    "Denim",
+                    "Outerwear",
+                    "Sportswear",
+                    "Home Textiles",
+                    "Garment Accessories",
+                    "Sustainable Fabrics",
+                    "Quality Inspection"
+                ]
+            }
+        </script>
     </head>
     <body>
         <div id="root"></div>
