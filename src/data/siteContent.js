@@ -1,15 +1,7 @@
 // src/data/siteContent.js
 // Static marketing copy. Nothing here is editable from the CMS by design —
 // numbers, contacts and certifications come from the API instead.
-import {
-    Shirt,
-    Scissors,
-    Factory,
-    ShieldCheck,
-    Leaf,
-    Ship,
-    Handshake,
-} from "lucide-react";
+import { Shirt, Scissors, Factory, ShieldCheck, Leaf, Ship, Handshake } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export const SITE = {
@@ -279,4 +271,88 @@ export const COMPLIANCE_STANDARDS = [
     { name: "GRS" },
     { name: "Sedex / SMETA" },
     { name: "BCI" },
+];
+
+/* --------------------------- Sourcing network --------------------------- */
+// Homepage supplier directory. Static by design — a list this stable does not
+// justify a CMS collection. `address` is optional: rows with no address render
+// name + specialty only, so the register stays honest until the client confirms
+// the missing addresses. `country` prints as the right-hand origin tag.
+export const SOURCING_NETWORK = [
+    {
+        id: "mills",
+        label: "Fabric & Trim Mills",
+        descriptor: "Vetted overseas partners for greige, dyed fabric, yarn and hardware.",
+        entries: [
+            {
+                name: "Hangzhou Ruitan Textile Co., Ltd",
+                country: "China",
+                specialty: "Fabric",
+                address:
+                    "Room 512, Wellong 3#, No.88 Jiangling Road, Binjiang District, Hangzhou, Zhejiang 310051, China",
+            },
+            {
+                name: "Gaoyuan Hongding Group",
+                country: "China",
+                specialty: "Weaving & textile",
+                address:
+                    "1701-05, 588# DunHuang Road, Shengze Town, Wujiang Zone, Suzhou City, Jiangsu, China",
+            },
+            {
+                name: "Liguotai Imp. & Exp. Co., Ltd",
+                country: "China",
+                specialty: "Dyed fabric",
+                address: "1242# Huxi Road, Keqiao, Shaoxing, Zhejiang 312030, China",
+            },
+            {
+                name: "Wuxi Rever International Ltd",
+                country: "China",
+                specialty: "Woven & knit",
+                address: "No.365-1201, East Xihu Road, Liangxi District, Wuxi City, Jiangsu, China",
+            },
+            {
+                name: "Wenzhou Novia Imp. & Exp. Trading Co., Ltd",
+                country: "China",
+                specialty: "Zippers & buttons",
+                // TODO(client): confirm full street address — card showed city only.
+                address: "Wenzhou, Zhejiang, China",
+            },
+        ],
+    },
+    {
+        id: "units",
+        label: "Manufacturing Units",
+        descriptor: "In-house-managed accessory and trim production.",
+        entries: [
+            // TODO(client): add street addresses for both units.
+            { name: "Trim Zone", country: "Bangladesh", specialty: "Trims", address: "" },
+            {
+                name: "P.S. Accessories Industries Ltd.",
+                country: "Bangladesh",
+                specialty: "Accessories",
+                address: "",
+            },
+        ],
+    },
+    {
+        id: "logistics",
+        label: "Courier & Logistics",
+        descriptor: "Bangladesh freight and courier partners moving goods to port.",
+        entries: [
+            // TODO(client): add addresses for all three agents.
+            {
+                name: "Bhasani Express Ltd.",
+                country: "Bangladesh",
+                specialty: "Courier",
+                address: "",
+            },
+            {
+                name: "SSS Logistics Ltd.",
+                country: "Bangladesh",
+                specialty: "Freight",
+                address: "",
+            },
+            { name: "Freedom Cargo", country: "Bangladesh", specialty: "Cargo", address: "" },
+        ],
+    },
 ];

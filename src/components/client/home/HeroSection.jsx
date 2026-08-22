@@ -161,7 +161,7 @@ function CategoryShowcase({ rows }) {
 
     return (
         <div className="relative mb-8 h-40 sm:h-48">
-            <div className="absolute top-6 right-2 z-0 h-28 w-24  overflow-hidden rounded-xl border border-white/15 shadow-xl sm:h-39.5 sm:w-30">
+            <div className="hidden sm:block absolute top-6 right-2 z-0 h-28 w-24  overflow-hidden rounded-xl border border-white/15 shadow-xl sm:h-39.5 sm:w-30">
                 <img
                     src={SLIDES[1].url}
                     alt=""
@@ -174,7 +174,7 @@ function CategoryShowcase({ rows }) {
                 </span>
             </div>
 
-            <div className="absolute top-6 left-0 z-10 h-34 w-[72%] overflow-hidden rounded-2xl border border-white/15 shadow-2xl sm:h-40">
+            <div className="absolute top-6 left-0 z-10 h-34 w-full sm:w-[72%] overflow-hidden rounded-2xl border border-white/15 shadow-2xl sm:h-40">
                 <img
                     src={SLIDES[0].url}
                     alt=""

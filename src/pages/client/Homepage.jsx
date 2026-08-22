@@ -11,6 +11,7 @@ import {
     ServicesGrid,
     FeaturedProducts,
     ProcessRail,
+    SourcingNetwork,
     CtaBand,
 } from "../../components/client/home";
 
@@ -43,6 +44,7 @@ export default function Homepage() {
             <ServicesGrid />
             <FeaturedProducts />
             <ProcessRail />
+            <SourcingNetwork />
             <CtaBand />
         </>
     );
